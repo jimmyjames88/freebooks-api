@@ -1,5 +1,5 @@
-import express, { Request, Response, NextFunction } from 'express'
-import { hash } from 'bcryptjs'
+import { Request, Response } from 'express'
+import { compare, hash } from 'bcryptjs'
 import { User } from '../models/User'
 
 export default {
@@ -9,11 +9,11 @@ export default {
   },
 
   async show(req: Request, res: Response) {
-    const user = await User.findById(req.params.userId)
+    const user = await User.findById(req.params.userId).populate('clients')
     res.json(user)
   },
 
-  async create(req: Request, res: Response) {
+  async store(req: Request, res: Response) {
     const { email, password, profile } = req.body
     const hashedPassword = await hash(password, 10)
     const user = await User.create({

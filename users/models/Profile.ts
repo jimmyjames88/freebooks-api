@@ -1,18 +1,13 @@
-import mongoose, { Schema } from 'mongoose'
-
-const AddressSchema = new Schema({
-  line1: String,
-  line2: String,
-  city: String,
-  province: String,
-  postal: String,
-  country: String
-})
+import { Schema } from 'mongoose'
+import { AddressSchema } from './Address'
 
 export const ProfileSchema = new Schema({
-  firstName: String,
-  lastName: String,
+  name: {
+    type: String,
+    required: true
+  },
   companyName: String,
   phone: String,
+  website: String,
   address: AddressSchema
 })

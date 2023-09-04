@@ -12,7 +12,17 @@ const UserSchema = new Schema({
     minlength: 8,
     required: true
   },
-  profile: ProfileSchema
+  profile: ProfileSchema,
+  clients:  [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Client',
+    required: true
+  }],
+  invoices:  [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Invoice',
+    required: true
+  }]
 }, { 
   timestamps: true,
   toJSON: {
