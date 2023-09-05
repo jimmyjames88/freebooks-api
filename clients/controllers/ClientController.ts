@@ -29,7 +29,7 @@ export default {
   async store(req: Request, res: Response) {
     const { userId, name, address, phone, email, website } = req.body
     const user = await User.findById(userId)
-    const client = Client.create({
+    const client = new Client({
       name,
       address,
       email,
@@ -37,7 +37,17 @@ export default {
       website,
       user
     })
+    client.save()
 
-    return res.sendStatus(201)
+    return res.status(201).json({ _id: client._id })
+  },
+
+  async destroy(req: Request, res: Response) {
+    const client = await Client.findByIdAndDelete(req.params.clientId)
+    Invoice.deleteMany({ client: req.params.clientId })
+
+    if (client)
+      return res.sendStatus(204)
+    return res.sendStatus(404)
   }
 }
