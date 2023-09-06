@@ -2,11 +2,12 @@ import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
-import 'dotenv/config'
 import userRoutes from './users/routes'
 import authRoutes from './auth/routes'
 import clientRoutes from './clients/routes'
 import invoiceRoutes from './invoices/routes'
+console.log('#############', process.env.NODE_ENV)
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
 
 const app = express()
 const dbHost = 'mongodb://127.0.0.1'
