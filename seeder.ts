@@ -18,6 +18,10 @@ const dbHost = 'mongodb://127.0.0.1'
 const serve = async () => {
   try {
     await mongoose.connect(dbHost)
+    Invoice.deleteMany({})
+    Client.deleteMany({})
+    User.deleteMany({})
+    
     seed()
   } catch (err) {
     console.error(err)

@@ -16,5 +16,9 @@
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.12",
     "mongoose": "^7.4.3"
+  },
+  "scripts": {
+    "dev": "ts-node app.ts",
+    "seed": "ts-node seeder.ts"
   }
 }
