@@ -18,9 +18,9 @@ const dbHost = 'mongodb://127.0.0.1'
 const serve = async () => {
   try {
     await mongoose.connect(dbHost)
-    Invoice.deleteMany({})
-    Client.deleteMany({})
-    User.deleteMany({})
+    await Invoice.deleteMany({})
+    await Client.deleteMany({})
+    await User.deleteMany({})
     
     seed()
   } catch (err) {
@@ -56,7 +56,7 @@ const seed = async () => {
           line2: faker.location.secondaryAddress(),
           city: faker.location.city(),
           province: faker.location.state(),
-          postalCode: faker.location.zipCode(),
+          postal: faker.location.zipCode(),
           country: faker.location.country()
         },
         phone: faker.phone.number(),

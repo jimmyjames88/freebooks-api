@@ -42,6 +42,27 @@ export default {
     return res.status(201).json({ _id: client._id })
   },
 
+  async edit(req: Request, res: Response) {
+    const client = await Client.findById(req.params.clientId)
+    if (client)
+      return res.json(client)
+    return res.sendStatus(404)
+  },
+
+  async update(req: Request, res: Response) {
+    const { name, address, phone, email, website } = req.body
+    const client = await Client.findByIdAndUpdate(req.params.clientId, {
+      name,
+      address,
+      email,
+      phone,
+      website
+    })
+    if (client)
+      return res.sendStatus(204)
+    return res.sendStatus(404)
+  },
+
   async destroy(req: Request, res: Response) {
     const client = await Client.findByIdAndDelete(req.params.clientId)
     Invoice.deleteMany({ client: req.params.clientId })
