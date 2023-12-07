@@ -6,23 +6,22 @@ import { User } from '@models/User'
 export default {
   async index(req: Request, res: Response) {
     const invoices = await Invoice.findAll({ 
-      where: { user: req.body.userId }
+      where: { userId: Number(req.body.userId) }
     })
     if (invoices)
-      return res.json(invoices)
+      return res.send(invoices)
     return res.sendStatus(404)
     
   },
 
   async show(req: Request, res: Response) {
-    const invoice = await Invoice.findByPk(req.params.invoiceId)
+    const invoice = await Invoice.findByPk(Number(req.params.invoiceId))
     return res.json(invoice)
   },
 
   async store(req: Request, res: Response) {
     const { userId, clientId, ref, date, notes, lineItems, subtotal, tax, total } = req.body
-    console.log('#####', userId, clientId)
-    const user = await User.findByPk(userId)
+    const user = await User.findByPk(Number(userId))
     const client = await Client.findByPk(clientId)
     await Invoice.create({
       ref,
