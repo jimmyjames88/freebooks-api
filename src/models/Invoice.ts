@@ -10,6 +10,8 @@ export class Invoice extends Model {
   declare ref: string
   declare date: Date
   declare notes: string
+  declare address: object
+  declare lineItems: object
   declare subtotal: number
   declare tax: number
   declare total: number
@@ -29,6 +31,8 @@ Invoice.init({
   ref: DataTypes.STRING,
   date: DataTypes.DATE,
   notes: DataTypes.STRING,
+  address: DataTypes.JSON,
+  lineItems: DataTypes.JSON,
   subtotal: DataTypes.DECIMAL,
   tax: DataTypes.DECIMAL,
   total: DataTypes.DECIMAL

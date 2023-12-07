@@ -16,7 +16,7 @@ export default {
 
   async show(req: Request, res: Response) {
     const invoice = await Invoice.findByPk(Number(req.params.invoiceId))
-    return res.json(invoice)
+    return res.send(invoice)
   },
 
   async store(req: Request, res: Response) {

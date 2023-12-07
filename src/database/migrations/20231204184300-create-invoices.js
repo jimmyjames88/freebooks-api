@@ -21,6 +21,14 @@ module.exports = {
       notes: {
         type: Sequelize.STRING
       },
+      address: {
+        type: Sequelize.JSON,
+        defaultValue: {}
+      },
+      lineItems: {
+        type: Sequelize.JSON,
+        defaultValue: []
+      },
       subtotal: {
         type: Sequelize.DECIMAL
       },
@@ -29,10 +37,6 @@ module.exports = {
       },
       total: {
         type: Sequelize.DECIMAL
-      },
-      lineItems: {
-        type: Sequelize.JSON,
-        defaultValue: []
       },
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE,
