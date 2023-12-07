@@ -6,6 +6,7 @@ import userRoutes from './src/router/users'
 import authRoutes from './src/router/auth'
 import clientRoutes from './src/router/clients'
 import invoiceRoutes from './src/router/invoices'
+import reportRoutes from './src/router/reports'
 import process from 'process'
 
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
@@ -20,6 +21,7 @@ app.use('/users', userRoutes)
 app.use('/auth', authRoutes)
 app.use('/clients', clientRoutes)
 app.use('/invoices', invoiceRoutes)
+app.use('/reports', reportRoutes)
 
 app.use((req, res, next) => {
   if (req.headers['content-type'] === 'application/json') {
