@@ -12,7 +12,10 @@ export let sequelize: any
 sequelize = new Sequelize(conf.database, conf.username, conf.password, {
   host: '127.0.0.1',
   port: conf.port,
-  dialect: 'mysql'
+  dialect: 'mysql',
+  dialectOptions: {
+    decimalNumbers: true
+  }
 })
 
 fs
@@ -26,7 +29,6 @@ fs
     )
   })
   .forEach((file: string) => {
-    console.log('$$$$$$$', __dirname, file)
     const model = require(path.join(__dirname, file))
     db[model.name] = model
   })
