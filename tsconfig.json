@@ -8,6 +8,10 @@
     "baseUrl": "./src",
     "paths": {
       "@models/*": ["./models/*"],
+      "@controllers/*": ["./controllers/*"],
+      "@config/*": ["./config/*"],
+      "@database/*": ["./database/*"],
+      "@middleware/*": ["./middleware/*"]
     }
   },
   "include": ["**/*.ts", "src/database/migrations/*.js"],
