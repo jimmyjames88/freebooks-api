@@ -1,20 +1,25 @@
 import express from 'express'
-import mongoose from 'mongoose'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
-import userRoutes from './users/routes'
-import authRoutes from './auth/routes'
-import clientRoutes from './clients/routes'
-import invoiceRoutes from './invoices/routes'
-console.log('#############', process.env.NODE_ENV)
+import { sequelize } from './src/models/index'
+import userRoutes from './src/router/users'
+import authRoutes from './src/router/auth'
+import clientRoutes from './src/router/clients'
+import invoiceRoutes from './src/router/invoices'
+import process from 'process'
+
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
 
 const app = express()
-const dbHost = 'mongodb://127.0.0.1'
 const port = 3000
 
 app.use(express.json())
 app.use(cors())
+
+app.use('/users', userRoutes)
+app.use('/auth', authRoutes)
+app.use('/clients', clientRoutes)
+app.use('/invoices', invoiceRoutes)
 
 app.use((req, res, next) => {
   if (req.headers['content-type'] === 'application/json') {
@@ -29,15 +34,18 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/users', userRoutes)
-app.use('/auth', authRoutes)
-app.use('/clients', clientRoutes)
-app.use('/invoices', invoiceRoutes)
+sequelize.sync()
+  .then(() => {
+    console.log("Synced db.");
+    serve()
+  })
+  .catch((err: Error) => {
+    console.log("Failed to sync db: " + err.message);
+  });
 
 // server
 const serve = async () => {
   try {
-    await mongoose.connect(dbHost)
     app.listen(port, () => {
       console.log(`API server listening on port: ${port}`)
     })
@@ -47,7 +55,6 @@ const serve = async () => {
   }
 }
 
-serve()
 
 
 

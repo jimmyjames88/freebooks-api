@@ -1,6 +1,15 @@
 {
   "compilerOptions": {
+    "target": "ES6",
+    "moduleResolution": "node",
     "strict": true,
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@models/*": ["./models/*"],
+    }
+  },
+  "include": ["**/*.ts", "src/database/migrations/*.js"],
+
 }
