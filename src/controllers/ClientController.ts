@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import { Client } from '@models/Client'
-import { User } from '@models/User'
-import { Invoice } from '@models/Invoice'
+import Client from '@models/Client'
+import User from '@models/User'
+import Invoice from '@models/Invoice'
 
 export default {
   async index(req: Request, res: Response) {
@@ -22,9 +22,11 @@ export default {
   },
 
   async show(req: Request, res: Response) {
-    const client = await Client.findByPk(req.params.clientId)
+    const client = await Client.findByPk(req.params.clientId, {
+      include: Invoice
+    })
     if (client)
-      return res.json(client)
+      return res.send(client)
     return res.sendStatus(404);
   },
 
@@ -37,9 +39,9 @@ export default {
       email,
       phone,
       website,
-      user
+      userId
     })
-    client.save()
+    await client.save()
 
     return res.status(201).json({ id: client.id })
   },

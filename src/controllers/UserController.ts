@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { compare, hash } from 'bcryptjs'
-import { User } from '@models/User'
+import User from '@models/User'
 
 export default {
   async show(req: Request, res: Response) {

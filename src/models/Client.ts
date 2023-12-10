@@ -2,20 +2,13 @@
 
 import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '@models/index'
-import { Invoice } from './Invoice'
-import { User } from './User'
 
-export class Client extends Model {
+export default class Client extends Model {
   declare id: number
   declare name: string
   declare email: string
   declare phone: string
   declare website: string
-
-  associate() {
-    Client.belongsTo(User)
-    Client.hasMany(Invoice)
-  }
 }
 
 Client.init({
@@ -38,5 +31,6 @@ Client.init({
   userId: DataTypes.INTEGER
 }, {
   sequelize,
+  modelName: 'client',
   tableName: 'clients'
 })

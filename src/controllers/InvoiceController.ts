@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import { Invoice } from '@models/Invoice'
-import { Client } from '@models/Client'
-import { User } from '@models/User'
+import Invoice from '@models/Invoice'
+import Client from '@models/Client'
+import User from '@models/User'
 
 export default {
   async index(req: Request, res: Response) {

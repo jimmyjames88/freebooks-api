@@ -14,6 +14,8 @@
       "@middleware/*": ["./middleware/*"]
     }
   },
-  "include": ["**/*.ts", "src/database/migrations/*.js"],
+  "include": ["**/*.ts", "**/*.js"],
+  "moduleResolution": "node",
+  "rootDir": "./"
 
 }

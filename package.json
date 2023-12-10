@@ -4,8 +4,6 @@
   "description": "Freebooks API",
   "main": "app.ts",
   "dependencies": {
-    "@babel/preset-env": "^7.23.5",
-    "@babel/register": "^7.22.15",
     "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "^9.0.2",
     "bcryptjs": "^2.4.3",
@@ -17,6 +15,7 @@
     "mysql2": "^3.6.0",
     "sequelize": "^6.33.0",
     "sequelize-cli": "^6.6.2",
+    "tslib": "^2.6.2",
     "typescript": "^5.1.6"
   },
   "devDependencies": {

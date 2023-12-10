@@ -1,20 +1,15 @@
 import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '@models/index'
-import { Invoice } from './Invoice'
-import { Client } from './Client'
+import Invoice from './Invoice'
+import Client from './Client'
 
-export class User extends Model {
+export default class User extends Model {
   declare id: number
   declare email: string
   declare password: string
   declare name: string
   declare createdAt: Date
   declare updatedAt: Date
-
-  associate() {
-    User.hasMany(Invoice)
-    User.hasMany(Client)
-  }
 }
 
 User.init({
@@ -49,5 +44,13 @@ User.init({
   }
 }, {
   sequelize,
+  modelName: 'user',
   tableName: 'users'
 })
+
+User.hasMany(Invoice)
+User.hasMany(Client)
+Invoice.belongsTo(User)
+Client.belongsTo(User)
+Client.hasMany(Invoice)
+Invoice.belongsTo(Client)

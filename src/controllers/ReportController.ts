@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { Invoice } from '@models/Invoice'
+import Invoice from '@models/Invoice'
 
 export default {
   async totals(req: Request, res: Response) {

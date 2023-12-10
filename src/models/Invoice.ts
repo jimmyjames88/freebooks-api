@@ -2,10 +2,8 @@
 
 import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '@models/index'
-import { Client } from './Client'
-import { User } from './User'
 
-export class Invoice extends Model {
+export default class Invoice extends Model {
   declare id: number
   declare ref: string
   declare date: Date
@@ -15,11 +13,6 @@ export class Invoice extends Model {
   declare subtotal: number
   declare tax: number
   declare total: number
-
-  associate() {
-    Invoice.belongsTo(User)
-    Invoice.belongsTo(Client)
-  }
 }
 
 Invoice.init({
@@ -35,8 +28,12 @@ Invoice.init({
   lineItems: DataTypes.JSON,
   subtotal: DataTypes.DECIMAL,
   tax: DataTypes.DECIMAL,
-  total: DataTypes.DECIMAL
+  total: DataTypes.DECIMAL,
+  userId: DataTypes.INTEGER,
+  clientId: DataTypes.INTEGER
 }, {
   sequelize: sequelize,
+  modelName: 'invoice',
   tableName: 'invoices'
 })
+
