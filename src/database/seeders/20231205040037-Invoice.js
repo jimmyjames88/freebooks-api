@@ -5,7 +5,7 @@ const { faker } = require('@faker-js/faker')
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    const data = [...Array(15).keys()].map((i) => {
+    const data = [...Array(300).keys()].map((i) => {
       const subtotal = parseFloat(faker.finance.amount())
       return {
         refNo: `INV-${i}`,

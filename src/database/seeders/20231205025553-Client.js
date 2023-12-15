@@ -7,7 +7,7 @@ const { faker } = require('@faker-js/faker')
 module.exports = {
   async up (queryInterface, Sequelize) {
     
-    const data = [...Array(5).keys()].map((i) => ({
+    const data = [...Array(100).keys()].map((i) => ({
       name: faker.company.name(),
       email: faker.internet.email(),
       phone: faker.phone.number(),

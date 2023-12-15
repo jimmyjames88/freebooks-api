@@ -1,15 +1,17 @@
 import { Request, Response } from 'express'
-import { Op } from 'sequelize'
+import { Op, FindOptions } from 'sequelize'
 import Client from '@models/Client'
 import User from '@models/User'
 import Invoice from '@models/Invoice'
 
 export default {
   async index(req: Request, res: Response) {
-    const options: any = {
+    const options: FindOptions  = {
       where: { 
         userId: Number(req.body.userId),
       },
+      offset: (Number(req.query.page) - 1) * Number(req.query.itemsPerPage || 10) || 0,
+      limit: Number(req.query.itemsPerPage) || 10
     } 
     if (req.query.search) {
       options.where = {
@@ -20,10 +22,19 @@ export default {
         ]
       }
     }
+    if (req.query.sortBy) {
+      const [ sortBy ] = req.query.sortBy as any
+      options.order = [ [ sortBy.key, sortBy.order ] ]
+    }
+
     const clients = await Client.findAll(options)
+    const total = await Client.count({ where: options.where })
     if (!clients)
       return res.sendStatus(404)
-    return res.json(clients)
+    return res.json({
+      clients,
+      total
+    })
   },
 
   async list(req: Request, res: Response) {
