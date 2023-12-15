@@ -1,13 +1,26 @@
 import { Request, Response } from 'express'
+import { Op } from 'sequelize'
 import Client from '@models/Client'
 import User from '@models/User'
 import Invoice from '@models/Invoice'
 
 export default {
   async index(req: Request, res: Response) {
-    const clients = await Client.findAll({ 
-      where: { userId: Number(req.body.userId) }
-    })
+    const options: any = {
+      where: { 
+        userId: Number(req.body.userId),
+      },
+    } 
+    if (req.query.search) {
+      options.where = {
+        ...options.where,
+        [Op.or]: [
+          { 'name': { [Op.like]: '%' + req.query.search + '%' } },
+          { 'email': { [Op.like]: '%' + req.query.search + '%' } }
+        ]
+      }
+    }
+    const clients = await Client.findAll(options)
     if (!clients)
       return res.sendStatus(404)
     return res.json(clients)
