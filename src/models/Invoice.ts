@@ -21,7 +21,7 @@ Invoice.init({
     autoIncrement: true,
     primaryKey: true
   },
-  ref: DataTypes.STRING,
+  refNo: DataTypes.STRING,
   date: DataTypes.DATE,
   notes: DataTypes.STRING,
   address: DataTypes.JSON,

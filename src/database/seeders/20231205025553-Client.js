@@ -12,6 +12,14 @@ module.exports = {
       email: faker.internet.email(),
       phone: faker.phone.number(),
       website: faker.internet.url(),
+      address: JSON.stringify({
+        line1: faker.location.streetAddress(),
+        line2: faker.location.secondaryAddress(),
+        city: faker.location.city(),
+        state: faker.location.state(),
+        postal: faker.location.zipCode(),
+        country: faker.location.country()
+      }),
       userId: 1,
       createdAt: new Date(),
       updatedAt: new Date()

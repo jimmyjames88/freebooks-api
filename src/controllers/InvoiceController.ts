@@ -6,7 +6,8 @@ import User from '@models/User'
 export default {
   async index(req: Request, res: Response) {
     const invoices = await Invoice.findAll({ 
-      where: { userId: Number(req.body.userId) }
+      where: { userId: Number(req.body.userId) },
+      include: [{ model: Client }]
     })
     if (invoices)
       return res.send(invoices)
@@ -20,11 +21,11 @@ export default {
   },
 
   async store(req: Request, res: Response) {
-    const { userId, clientId, ref, date, notes, lineItems, subtotal, tax, total } = req.body
+    const { userId, clientId, refNo, date, notes, lineItems, subtotal, tax, total } = req.body
     const user = await User.findByPk(Number(userId))
     const client = await Client.findByPk(clientId)
     await Invoice.create({
-      ref,
+      refNo,
       date,
       notes,
       lineItems,

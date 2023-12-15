@@ -8,7 +8,7 @@ module.exports = {
     const data = [...Array(15).keys()].map((i) => {
       const subtotal = parseFloat(faker.finance.amount())
       return {
-        ref: `INV-${i}`,
+        refNo: `INV-${i}`,
         date: faker.date.past(),
         notes: faker.lorem.sentence(),
         subtotal,
