@@ -1,5 +1,4 @@
 'use strict';
-
 const { faker } = require('@faker-js/faker')
 
 /** @type {import('sequelize-cli').Migration} */
@@ -7,8 +6,10 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     const data = [...Array(300).keys()].map((i) => {
       const subtotal = parseFloat(faker.finance.amount())
+      const status = i % 2 === 0 ? 'DRAFT' : 'SENT'
       return {
         refNo: `INV-${i}`,
+        status,
         date: faker.date.past(),
         notes: faker.lorem.sentence(),
         subtotal,

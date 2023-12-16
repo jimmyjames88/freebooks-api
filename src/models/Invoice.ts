@@ -3,9 +3,18 @@
 import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '@models/index'
 
+export enum InvoiceStatus {
+  DRAFT = 'draft',
+  SENT = 'sent',
+  PARTIAL = 'partial',
+  PAID = 'paid',
+  VOID = 'void'
+}
+
 export default class Invoice extends Model {
   declare id: number
   declare ref: string
+  declare status: InvoiceStatus
   declare date: Date
   declare notes: string
   declare address: object
@@ -22,6 +31,13 @@ Invoice.init({
     primaryKey: true
   },
   refNo: DataTypes.STRING,
+  status: DataTypes.ENUM(
+    InvoiceStatus.DRAFT,
+    InvoiceStatus.SENT,
+    InvoiceStatus.PARTIAL,
+    InvoiceStatus.PAID,
+    InvoiceStatus.VOID
+  ),
   date: DataTypes.DATE,
   notes: DataTypes.STRING,
   address: DataTypes.JSON,

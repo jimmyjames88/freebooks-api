@@ -15,6 +15,10 @@ module.exports = {
           notEmpty: true
         }
       },
+      status: {
+        type: Sequelize.STRING,
+        defaultValue: 'DRAFT'
+      },
       date: {
         type: Sequelize.DATE
       },
