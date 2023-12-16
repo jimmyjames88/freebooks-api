@@ -95,11 +95,24 @@ export default {
   },
 
   async destroy(req: Request, res: Response) {
-    const client = await Client.findByPk(req.params.clientId)
-    if (client)
-      await client.destroy()
+    const client = await Client.findOne({
+      where: { 
+        userId: Number(req.body.userId),
+        id: req.params.clientId
+      },
+      include: Invoice
+    })
 
-    const destroyed = await Invoice.destroy({ where: { client: req.params.clientId }})
-    return res.sendStatus(destroyed ? 204 : 404)
+    try {
+      if (client && client.invoices) {
+        client.invoices.forEach(async (invoice) => {
+          await invoice.destroy()
+        })
+        await client.destroy()
+      }
+      return res.sendStatus(204)
+    } catch {
+      return res.sendStatus(404)
+    }
   }
 }

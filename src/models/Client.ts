@@ -2,6 +2,7 @@
 
 import { Model, DataTypes } from 'sequelize'
 import { sequelize } from '@models/index'
+import Invoice from './Invoice'
 
 export default class Client extends Model {
   declare id: number
@@ -9,6 +10,7 @@ export default class Client extends Model {
   declare email: string
   declare phone: string
   declare website: string
+  declare invoices: Invoice[]
 }
 
 Client.init({

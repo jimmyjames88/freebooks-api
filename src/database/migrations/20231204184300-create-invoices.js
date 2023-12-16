@@ -44,18 +44,18 @@ module.exports = {
       // Associations
       userId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
           model: 'Users',
           key: 'id'
-        }
+        },
+        allowNull: false,
       },
       clientId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Clients',
           key: 'id'
-        }
+        },
       },
     });
   },

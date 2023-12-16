@@ -15,7 +15,7 @@ module.exports = {
         tax: subtotal * 0.05,
         total: subtotal * 1.05,
         userId: 1,
-        clientId: Math.floor(Math.random() * 5) + 1,
+        clientId: Math.floor(Math.random() * 100) + 1,
         createdAt: new Date(),
         updatedAt: new Date()
       }
