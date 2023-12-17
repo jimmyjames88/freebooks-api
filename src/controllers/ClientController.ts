@@ -32,7 +32,7 @@ export default {
     if (!clients)
       return res.sendStatus(404)
     return res.json({
-      clients,
+      items: clients,
       total
     })
   },
