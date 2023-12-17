@@ -47,7 +47,13 @@ export default {
 
   async show(req: Request, res: Response) {
     const client = await Client.findByPk(req.params.clientId, {
-      include: Invoice
+      include: [
+        {
+          model: Invoice,
+          limit: 3,
+          order: [ [ 'updatedAt', 'DESC' ] ]
+        }
+    ]
     })
     if (client)
       return res.send(client)
