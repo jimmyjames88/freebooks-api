@@ -28,8 +28,12 @@ export default {
       }
     }
     if (req.query.sortBy) {
-      const [ sortBy ] = req.query.sortBy as any
-      options.order = [ [ sortBy.key, sortBy.order ] ]
+      let [ sortBy ] = req.query.sortBy as any
+      if (sortBy.key === 'client.name') {
+        options.order = [ [{ model: Client, as: 'client' }, 'name', sortBy.order] ]
+      } else {
+        options.order = [[ sortBy.key, sortBy.order ]]
+      }
     }
 
     const invoices = await Invoice.findAll(options)
