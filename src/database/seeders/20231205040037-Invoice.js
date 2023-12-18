@@ -19,7 +19,14 @@ module.exports = {
         userId: 1,
         clientId: Math.floor(Math.random() * 100) + 1,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        lineItems: JSON.stringify(
+          [ ...Array(Math.floor(Math.random() * 20)) ].map(() => ({
+            description: faker.lorem.sentence(),
+            quantity: Math.floor(Math.random() * 10) + 1,
+            rate: parseFloat(faker.finance.amount()),
+          }))
+        )
       }
     })
 

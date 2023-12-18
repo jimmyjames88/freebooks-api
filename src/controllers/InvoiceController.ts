@@ -47,8 +47,18 @@ export default {
   },
 
   async show(req: Request, res: Response) {
-    const invoice = await Invoice.findByPk(Number(req.params.invoiceId))
-    return res.send(invoice)
+    const invoice = await Invoice.findOne({
+      where: {
+        id: Number(req.params.invoiceId),
+        userId: Number(req.body.userId)
+      },
+      include: {
+        model: Client,
+        attributes: [ 'id', 'name' ],
+        as: 'client'
+      }
+    })
+    return res.json(invoice)
   },
 
   async store(req: Request, res: Response) {
