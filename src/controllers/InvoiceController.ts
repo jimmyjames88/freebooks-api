@@ -63,9 +63,7 @@ export default {
 
   async store(req: Request, res: Response) {
     const { userId, clientId, refNo, date, notes, lineItems, subtotal, tax, total } = req.body
-    const user = await User.findByPk(Number(userId))
-    const client = await Client.findByPk(clientId)
-    await Invoice.create({
+    const invoice = await Invoice.create({
       refNo,
       date,
       notes,
@@ -73,10 +71,10 @@ export default {
       subtotal,
       tax,
       total,
-      client,
-      user
+      clientId,
+      userId
     })
 
-    return res.sendStatus(201)
+    return res.status(201).json(invoice)
   }
 }
