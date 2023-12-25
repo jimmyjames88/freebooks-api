@@ -15,9 +15,9 @@ export default class Invoice extends Model {
   declare id: number
   declare ref: string
   declare status: InvoiceStatus
-  declare date: Date
+  declare issueDate: Date
+  declare dueDate: Date
   declare notes: string
-  declare address: object
   declare lineItems: object
   declare subtotal: number
   declare tax: number
@@ -38,9 +38,9 @@ Invoice.init({
     InvoiceStatus.PAID,
     InvoiceStatus.VOID
   ),
-  date: DataTypes.DATE,
+  issueDate: DataTypes.DATE,
+  dueDate: DataTypes.DATE,
   notes: DataTypes.STRING,
-  address: DataTypes.JSON,
   lineItems: DataTypes.JSON,
   subtotal: DataTypes.DECIMAL,
   tax: DataTypes.DECIMAL,

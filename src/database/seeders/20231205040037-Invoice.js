@@ -11,7 +11,8 @@ module.exports = {
       return {
         refNo: `INV-${invoiceNum + i}`,
         status,
-        date: faker.date.past(),
+        issueDate: faker.date.past(),
+        dueDate: faker.date.anytime(),
         notes: faker.lorem.sentence(),
         subtotal,
         tax: subtotal * 0.05,

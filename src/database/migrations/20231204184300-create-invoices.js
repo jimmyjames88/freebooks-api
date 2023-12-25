@@ -19,15 +19,14 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: 'DRAFT'
       },
-      date: {
-        type: Sequelize.DATE
+      issueDate: {
+        type: Sequelize.DATEONLY
+      },
+      dueDate: {
+        type: Sequelize.DATEONLY
       },
       notes: {
         type: Sequelize.STRING
-      },
-      address: {
-        type: Sequelize.JSON,
-        defaultValue: {}
       },
       lineItems: {
         type: Sequelize.JSON,

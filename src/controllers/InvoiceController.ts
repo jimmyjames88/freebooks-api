@@ -62,10 +62,22 @@ export default {
   },
 
   async store(req: Request, res: Response) {
-    const { userId, clientId, refNo, date, notes, lineItems, subtotal, tax, total } = req.body
+    const {
+      userId,
+      clientId,
+      refNo,
+      issueDate,
+      dueDate,
+      notes,
+      lineItems,
+      subtotal,
+      tax,
+      total
+    } = req.body
     const invoice = await Invoice.create({
       refNo,
-      date,
+      issueDate,
+      dueDate,
       notes,
       lineItems,
       subtotal,
