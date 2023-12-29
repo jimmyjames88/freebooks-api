@@ -54,7 +54,6 @@ export default {
       },
       include: {
         model: Client,
-        attributes: [ 'id', 'name' ],
         as: 'client'
       }
     })
