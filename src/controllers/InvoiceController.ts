@@ -68,11 +68,15 @@ export default {
       issueDate,
       dueDate,
       notes,
-      lineItems,
-      subtotal,
-      tax,
-      total
+      lineItems
     } = req.body
+
+    const subtotal = lineItems.reduce((acc: number, item: any) => {
+      return acc + (item.quantity * item.price)
+    }, 0)
+    const tax = subtotal * 0.05
+    const total = subtotal + tax
+
     const invoice = await Invoice.create({
       refNo,
       issueDate,
