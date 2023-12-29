@@ -33,13 +33,13 @@ module.exports = {
         defaultValue: []
       },
       subtotal: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.DECIMAL(10, 2)
       },
       tax: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.DECIMAL(10, 2)
       },
       total: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.DECIMAL(10, 2)
       },
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE,

@@ -2,7 +2,20 @@ import { Request, Response } from 'express'
 import { Op, FindOptions } from 'sequelize'
 import Invoice from '@models/Invoice'
 import Client from '@models/Client'
-import User from '@models/User'
+
+const calculateTotals = (lineItems: any[]) => {
+  // calculate subtotal, but remove any line items where rate or quantity are either missing or are not a number
+  const subtotal = lineItems.reduce((acc: number, item: any) => {
+    if (item.rate && item.quantity) {
+      return acc + (Number(item.rate) * Number(item.quantity))
+    }
+    return acc
+  }, 0)
+  
+  const tax = subtotal * 0.05
+  const total = subtotal + tax
+  return { subtotal, tax, total }
+}
 
 export default {
   async index(req: Request, res: Response) {
@@ -71,11 +84,7 @@ export default {
       lineItems
     } = req.body
 
-    const subtotal = lineItems.reduce((acc: number, item: any) => {
-      return acc + (item.quantity * item.price)
-    }, 0)
-    const tax = subtotal * 0.05
-    const total = subtotal + tax
+    const { subtotal, tax, total } = calculateTotals(lineItems)
 
     const invoice = await Invoice.create({
       refNo,
@@ -91,5 +100,53 @@ export default {
     })
 
     return res.status(201).json(invoice)
+  },
+
+  update(req: Request, res: Response) {
+    const {
+      id,
+      refNo,
+      issueDate,
+      dueDate,
+      notes,
+      lineItems
+    } = req.body
+
+    const { subtotal, tax, total } = calculateTotals(lineItems)
+
+    Invoice.update({
+      refNo,
+      issueDate,
+      dueDate,
+      notes,
+      lineItems,
+      subtotal,
+      tax,
+      total
+    }, {
+      where: {
+        id: Number(id),
+        userId: Number(req.body.userId)
+      }
+    }).then(() => {
+      return res.sendStatus(204)
+    }).catch((err: any) => {
+      console.warn(err)
+      return res.sendStatus(500)
+    })
+  },
+
+  async loadLatestRefNo(req: Request, res: Response) {
+    const invoice = await Invoice.findOne({
+      where: {
+        userId: Number(req.body.userId),
+        refNo: { [Op.ne]: '' }
+      },
+      order: [ [ 'createdAt', 'DESC' ] ]
+    })
+    
+    if (invoice?.refNo)
+      return res.json({ refNo: invoice.refNo })
+    return res.json({ refNo: 0 })
   }
 }
