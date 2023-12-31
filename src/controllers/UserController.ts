@@ -1,20 +1,11 @@
 import { Request, Response } from 'express'
+import { _User } from '@jimmyjames88/freebooks-types'
 import { compare, hash } from 'bcryptjs'
 import User from '@models/User'
 
 export default {
   async show(req: Request, res: Response) {
     const user = await User.findByPk(req.params.userId)
-    return res.json(user)
-  },
-
-  async store(req: Request, res: Response) {
-    const { email, password } = req.body
-    const hashedPassword = await hash(password, 10)
-    const user = await User.create({
-      email,
-      password: hashedPassword
-    })
     return res.json(user)
   },
 

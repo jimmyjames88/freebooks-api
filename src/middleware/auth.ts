@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload, VerifyCallback, VerifyOptions } from 'jsonwebtoken'
 
 function validateToken(token: string, req: Request) {
   let valid = null
@@ -10,6 +10,7 @@ function validateToken(token: string, req: Request) {
       if (!err) {
         valid = decoded
         if (req.body) {
+          // todo: evaluate this... is slapping userID here really a good idea? Could be spoofed?
           req.body.userId = decoded.userId
         } else {
           req.body = { userId: decoded.userId }

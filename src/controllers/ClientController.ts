@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { Op, FindOptions } from 'sequelize'
-import Client from '@models/Client'
+import Client, { _ClientInput } from '@models/Client'
 import User from '@models/User'
 import Invoice from '@models/Invoice'
 
@@ -61,15 +61,10 @@ export default {
   },
 
   async store(req: Request, res: Response) {
-    const { userId, name, address, phone, email, website } = req.body
-    const user = await User.findByPk(userId)
+    const data: _ClientInput = req.body
     const client = new Client({
-      name,
-      address,
-      email,
-      phone,
-      website,
-      userId
+      ...data,
+      userId: Number(req.body.userId)
     })
     await client.save()
 

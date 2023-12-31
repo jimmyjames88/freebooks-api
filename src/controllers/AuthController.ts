@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { compare } from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { _User } from '@jimmyjames88/freebooks-types'
 import User from '@models/User'
 
 export default {
@@ -24,9 +25,10 @@ export default {
   },
 
   async register(req: Request, res: Response) {
-    const { email, password } = req.body
+    const { name, email, password }: _User = req.body
 
-    const user = User.create({
+    const user = await User.create({
+      name,
       email,
       password
     })

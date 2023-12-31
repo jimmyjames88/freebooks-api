@@ -1,17 +1,26 @@
 // Create a Sequelize model for the Client table based on the mongoose model in ./Client.old.ts
 
-import { Model, DataTypes } from 'sequelize'
+import { Model, DataTypes, Optional } from 'sequelize'
+import { _Address, _Client } from '@jimmyjames88/freebooks-types'
 import { sequelize } from '@models/index'
 import Invoice from './Invoice'
 
-export default class Client extends Model {
-  declare id: number
-  declare name: string
-  declare email: string
-  declare phone: string
-  declare website: string
-  declare invoices: Invoice[]
+
+export default class Client extends Model<_Client, _ClientInput> implements _Client {
+  public id!: number
+  public name!: string
+  public email!: string
+  public phone!: string
+  public website!: string
+  public address!: _Address
+  public readonly userId?: number
+  public readonly createdAt!: Date
+  public readonly updatedAt!: Date
+  public invoices?: Invoice[]
 }
+
+export interface _ClientInput extends Optional<_Client, 'email' | 'phone' | 'website' | 'address'> {}
+export interface _ClientOutput extends Required<_Client> {}
 
 Client.init({
   id: {

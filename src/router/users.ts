@@ -6,7 +6,6 @@ const router = express.Router()
 
 // Users
 router.get('/:userId', auth, (req: Request, res: Response) => UserController.show(req, res))
-router.post('/', (req: Request, res: Response) => UserController.store(req, res))
 router.put('/:userId', auth, async(req: Request, res: Response) => UserController.update(req, res))
 router.delete('/:userId', auth, async(req: Request, res: Response) => UserController.destroy(req, res))
 

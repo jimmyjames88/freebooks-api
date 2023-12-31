@@ -1,11 +1,12 @@
 import { Request, Response } from 'express'
 import { Op, FindOptions } from 'sequelize'
-import Invoice from '@models/Invoice'
+import { _Invoice, _LineItem } from '@jimmyjames88/freebooks-types'
+import Invoice, { _InvoiceInput } from '@models/Invoice'
 import Client from '@models/Client'
 
-const calculateTotals = (lineItems: any[]) => {
+const calculateTotals = (lineItems: _LineItem[]) => {
   // calculate subtotal, but remove any line items where rate or quantity are either missing or are not a number
-  const subtotal = lineItems.reduce((acc: number, item: any) => {
+  const subtotal = lineItems.reduce((acc: number, item: _LineItem) => {
     if (item.rate && item.quantity) {
       return acc + (Number(item.rate) * Number(item.quantity))
     }
@@ -74,29 +75,11 @@ export default {
   },
 
   async store(req: Request, res: Response) {
-    const {
-      userId,
-      clientId,
-      refNo,
-      issueDate,
-      dueDate,
-      notes,
-      lineItems
-    } = req.body
-
-    const { subtotal, tax, total } = calculateTotals(lineItems)
-
+    const data: _InvoiceInput = req.body
+    const totals = calculateTotals(data.lineItems)
     const invoice = await Invoice.create({
-      refNo,
-      issueDate,
-      dueDate,
-      notes,
-      lineItems,
-      subtotal,
-      tax,
-      total,
-      clientId,
-      userId
+      ...data,
+      ...totals
     })
 
     return res.status(201).json(invoice)
@@ -130,7 +113,7 @@ export default {
       }
     }).then(() => {
       return res.sendStatus(204)
-    }).catch((err: any) => {
+    }).catch((err: Error) => {
       console.warn(err)
       return res.sendStatus(500)
     })
