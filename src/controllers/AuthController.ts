@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { compare } from 'bcryptjs'
+import { compare, hash } from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { _User } from '@jimmyjames88/freebooks-types'
 import User from '@models/User'
@@ -30,9 +30,16 @@ export default {
     const user = await User.create({
       name,
       email,
-      password
+      password: await hash(password, 10)
     })
 
     return res.status(201).json(user)
+  },
+
+  async checkEmail(req: Request, res: Response) {
+    const { email } = req.body
+    console.log('EMAIL')
+    const user = await User.findOne({ where: { email } })
+    return res.status(200).json({ exists: !!user })
   }
 }

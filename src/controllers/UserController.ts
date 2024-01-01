@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import { _User } from '@jimmyjames88/freebooks-types'
-import { compare, hash } from 'bcryptjs'
 import User from '@models/User'
 
 export default {
