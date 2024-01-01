@@ -5,9 +5,10 @@ const { faker } = require('@faker-js/faker')
 module.exports = {
   async up (queryInterface, Sequelize) {
     const invoiceNum = Math.floor(Math.random()*90000) + 10000;
+    const statuses = ['draft', 'sent', 'partial', 'paid', 'void']
     const data = [...Array(300).keys()].map((i) => {
+      const status = statuses[Math.floor(Math.random() * statuses.length)]
       const subtotal = parseFloat(faker.finance.amount())
-      const status = i % 2 === 0 ? 'DRAFT' : 'SENT'
       return {
         refNo: `INV-${invoiceNum + i}`,
         status,
