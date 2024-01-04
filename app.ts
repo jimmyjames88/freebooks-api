@@ -5,6 +5,7 @@ import { sequelize } from './src/models/index'
 import userRoutes from './src/router/users'
 import authRoutes from './src/router/auth'
 import clientRoutes from './src/router/clients'
+import dashboardRoutes from './src/router/dashboard'
 import invoiceRoutes from './src/router/invoices'
 import reportRoutes from './src/router/reports'
 import process from 'process'
@@ -17,11 +18,12 @@ const port = 3000
 app.use(express.json())
 app.use(cors())
 
-app.use('/users', userRoutes)
 app.use('/auth', authRoutes)
 app.use('/clients', clientRoutes)
+app.use('/dashboard', dashboardRoutes)
 app.use('/invoices', invoiceRoutes)
 app.use('/reports', reportRoutes)
+app.use('/users', userRoutes)
 
 app.use((req, res, next) => {
   if (req.headers['content-type'] === 'application/json') {

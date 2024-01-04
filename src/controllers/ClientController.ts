@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { Op, FindOptions } from 'sequelize'
 import Client, { _ClientInput } from '@models/Client'
-import User from '@models/User'
 import Invoice from '@models/Invoice'
 
 export default {
@@ -105,13 +104,15 @@ export default {
     })
 
     try {
-      if (client && client.invoices) {
-        client.invoices.forEach(async (invoice) => {
-          await invoice.destroy()
-        })
-        await client.destroy()
+      if (client) {
+        if (client.invoices) {
+          client.invoices.forEach(async (invoice) => {
+            await invoice.destroy()
+          })
+          await client.destroy()
+        }
+        return res.sendStatus(204)
       }
-      return res.sendStatus(204)
     } catch {
       return res.sendStatus(404)
     }

@@ -49,6 +49,16 @@ export default {
         options.order = [[ sortBy.key, sortBy.order ]]
       }
     }
+    if (req.query.filters) {
+      const filters = req.query.filters as any
+      if (filters.custom.pastDue) {
+        options.where = {
+          ...options.where,
+          dueDate: { [Op.lt]: new Date() },
+          status: ['draft', 'sent', 'partial']
+        }
+      }
+    }
 
     const invoices = await Invoice.findAll(options)
     const total = await Invoice.count({ include: Client, where: options.where })
