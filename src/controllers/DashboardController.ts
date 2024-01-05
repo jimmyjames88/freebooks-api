@@ -10,7 +10,7 @@ export default {
         status: { [Op.notIn]: ['paid', 'void'] }
       }
     })
-    const overdue = await Invoice.sum('total', {
+    const pastDue = await Invoice.sum('total', {
       where: {
         userId: Number(req.body.userId),
         status: { [Op.notIn]: ['paid', 'void'] },
@@ -19,7 +19,7 @@ export default {
     })
     return res.json({
       revenue,
-      overdue
+      pastDue
     })
   }
 }

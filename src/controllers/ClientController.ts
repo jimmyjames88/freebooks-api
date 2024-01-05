@@ -113,8 +113,8 @@ export default {
         }
         return res.sendStatus(204)
       }
-    } catch {
-      return res.sendStatus(404)
+    } catch(err: any) {
+      return res.sendStatus(404).send(err.message)
     }
   }
 }

@@ -102,7 +102,8 @@ export default {
       issueDate,
       dueDate,
       notes,
-      lineItems
+      lineItems,
+      clientId
     } = req.body
 
     const { subtotal, tax, total } = calculateTotals(lineItems)
@@ -115,7 +116,8 @@ export default {
       lineItems,
       subtotal,
       tax,
-      total
+      total,
+      clientId
     }, {
       where: {
         id: Number(id),
@@ -123,6 +125,22 @@ export default {
       }
     }).then(() => {
       return res.sendStatus(204)
+    }).catch((err: Error) => {
+      console.warn(err)
+      return res.sendStatus(500)
+    })
+  },
+
+  async destroy(req: Request, res: Response) {
+    Invoice.destroy({
+      where: {
+        id: Number(req.params.invoiceId),
+        userId: Number(req.body.userId)
+      }
+    }).then((deleted) => {
+      if (deleted)
+        return res.sendStatus(204)
+      return res.sendStatus(404)
     }).catch((err: Error) => {
       console.warn(err)
       return res.sendStatus(500)

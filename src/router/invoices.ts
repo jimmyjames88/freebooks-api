@@ -10,5 +10,6 @@ router.get('/latest-ref-no', auth, (req: Request, res: Response) => InvoiceContr
 router.get('/:invoiceId', auth, (req: Request, res: Response) => InvoiceController.show(req, res))
 router.post('/', auth, (req: Request, res: Response) => InvoiceController.store(req, res))
 router.put('/:invoiceId', auth, (req: Request, res: Response) => InvoiceController.update(req, res))
+router.delete('/:invoiceId', auth, (req: Request, res: Response) => InvoiceController.destroy(req, res))
 
 export default router
