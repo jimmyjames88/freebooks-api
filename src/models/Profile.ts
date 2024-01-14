@@ -7,12 +7,12 @@ export default class Profile extends Model<_Profile, _ProfileInput> implements _
   public displayName!: string
   public displayEmail!: string
   public phone?: string
-  public address?: _Address
+  public address!: _Address
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 }
 
-export interface _ProfileInput extends Optional<_Profile, 'userId' | 'displayName' | 'displayEmail' | 'createdAt' | 'updatedAt'> {}
+export interface _ProfileInput extends Optional<_Profile, 'userId' | 'displayName' | 'displayEmail' | 'address' | 'createdAt' | 'updatedAt'> {}
 export interface _ProfileOutput extends Required<_Profile> {}
 
 Profile.init({

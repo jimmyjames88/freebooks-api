@@ -9,7 +9,7 @@ export default {
   
   async login(req: Request, res: Response) {
     const { email, password } = req.body
-    const user = await User.findOne({ where: { email }})
+    const user = await User.findOne({ where: { email }, include: Profile })
     const match = user && await compare(password, user.password as string)
     if (match) {
       const token = jwt.sign(
@@ -28,10 +28,11 @@ export default {
   async register(req: Request, res: Response) {
     const { name, email, password }: _User = req.body
 
+    
     const user = await User.create({
       name,
       email,
-      password: await hash(password, 10)
+      password: await hash(String(password), 10)
     })
 
     await Profile.create({

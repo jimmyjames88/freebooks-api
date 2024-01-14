@@ -18,23 +18,36 @@ export default {
   },
 
   async update(req: Request, res: Response) {
-    const { name, profile }: _User = req.body
-    const user = await User.update({
-      name
-    }, {
-      where: {
-        id: Number(req.body.userId) 
-      }
-    })
-    if (user) {
-      await Profile.update({ ...profile }, {
-        where: {
-          userId: Number(req.body.userId)
-        }
-      })
-      return res.json(user).status(200)
+    const { profile }: User = req.body
+    const user: User | null = await User.findByPk(req.body.userId, { include: {
+      model: Profile,
+      as: 'profile'
+    } })
+    if (user)  {
+      user.profile?.set({ ...profile })
+      await user.profile?.save()
+      await user.save()
+      return res.status(200).json(user)
     }
     return res.status(404).json({})
+
+    // const { name, profile }: _User = req.body
+    // const user = await User.update({
+    //   name
+    // }, {
+    //   where: {
+    //     id: Number(req.body.userId) 
+    //   },
+    // })
+    // if (user) {
+    //   await Profile.update({ ...profile }, {
+    //     where: {
+    //       userId: Number(req.body.userId)
+    //     }
+    //   })
+    //   return res.status(200)
+    // }
+    // return res.status(404).json({})
   },
 
   async destroy(req: Request, res: Response) {
