@@ -1,21 +1,40 @@
 import { Request, Response } from 'express'
 import { _User } from '@jimmyjames88/freebooks-types'
 import User from '@models/User'
+import Profile from '@models/Profile'
 
 export default {
   async show(req: Request, res: Response) {
-    const user = await User.findByPk(req.params.userId)
-    return res.json(user)
+    const user: _User | null = await User.findByPk(req.body.userId, { include: Profile })
+    if (user) {
+      return res.json({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        profile: user.profile
+      })
+    }
+    return res.status(404).json({})
   },
 
   async update(req: Request, res: Response) {
-    const user = await User.findByPk(req.params.userId)
-    const { email, password } = req.body
+    const { name, profile }: _User = req.body
+    const user = await User.update({
+      name
+    }, {
+      where: {
+        id: Number(req.body.userId) 
+      }
+    })
     if (user) {
-      user?.set({ email, password })
-      await user?.save()
+      await Profile.update({ ...profile }, {
+        where: {
+          userId: Number(req.body.userId)
+        }
+      })
+      return res.json(user).status(200)
     }
-    return res.json(user)
+    return res.status(404).json({})
   },
 
   async destroy(req: Request, res: Response) {

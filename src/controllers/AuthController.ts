@@ -3,6 +3,7 @@ import { compare, hash } from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { _User } from '@jimmyjames88/freebooks-types'
 import User from '@models/User'
+import Profile from '@models/Profile'
 
 export default {
   
@@ -31,6 +32,12 @@ export default {
       name,
       email,
       password: await hash(password, 10)
+    })
+
+    await Profile.create({
+      userId: user.id,
+      displayEmail: email,
+      displayName: name
     })
 
     return res.status(201).json(user)
