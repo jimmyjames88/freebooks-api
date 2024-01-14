@@ -3,6 +3,8 @@ import { Op, FindOptions } from 'sequelize'
 import { _Invoice, _LineItem } from '@jimmyjames88/freebooks-types'
 import Invoice, { _InvoiceInput } from '@models/Invoice'
 import Client from '@models/Client'
+import User from '@models/User'
+import Profile from '@models/Profile'
 
 const calculateTotals = (lineItems: _LineItem[]) => {
   // calculate subtotal, but remove any line items where rate or quantity are either missing or are not a number
@@ -76,10 +78,10 @@ export default {
         id: Number(req.params.invoiceId),
         userId: Number(req.body.userId)
       },
-      include: {
-        model: Client,
-        as: 'client'
-      }
+      include: [
+        { model: Client, as: 'client' },
+        { model: User, as: 'user', attributes: ['id'], include: [ { model: Profile, as: 'profile' } ] }
+      ]
     })
     return res.json(invoice)
   },
