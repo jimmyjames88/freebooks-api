@@ -1,12 +1,13 @@
 import { Request, Response } from 'express'
 import { Op, FindOptions } from 'sequelize'
-import { _Invoice, _LineItem } from '@jimmyjames88/freebooks-types'
+import { _Invoice, _LineItem, _Tax } from '@jimmyjames88/freebooks-types'
 import Invoice, { _InvoiceInput } from '@models/Invoice'
 import Client from '@models/Client'
 import User from '@models/User'
 import Profile from '@models/Profile'
+import Tax from '@models/Tax'
 
-const calculateTotals = (lineItems: _LineItem[]) => {
+const calculateTotal = (lineItems: _LineItem[], taxes: _Tax[]) => {
   // calculate subtotal, but remove any line items where rate or quantity are either missing or are not a number
   const subtotal = lineItems.reduce((acc: number, item: _LineItem) => {
     if (item.rate && item.quantity) {
@@ -15,9 +16,15 @@ const calculateTotals = (lineItems: _LineItem[]) => {
     return acc
   }, 0)
   
-  const tax = subtotal * 0.05
-  const total = subtotal + tax
-  return { subtotal, tax, total }
+  const total = taxes.reduce((acc: number, tax: _Tax) => {
+    if (tax.type === 'PERCENTAGE') {
+      return acc + (subtotal * tax.rate)
+    } else {
+      return acc + tax.rate
+    }
+  }, subtotal)
+
+  return total
 }
 
 export default {
@@ -80,24 +87,26 @@ export default {
       },
       include: [
         { model: Client, as: 'client' },
-        { model: User, as: 'user', attributes: ['id'], include: [ { model: Profile, as: 'profile' } ] }
+        { model: User, as: 'user', attributes: ['id'], include: [ { model: Profile, as: 'profile' } ] },
+        { model: Tax, as: 'taxes'}
       ]
     })
     return res.json(invoice)
   },
 
   async store(req: Request, res: Response) {
-    const data: _InvoiceInput = req.body
-    const totals = calculateTotals(data.lineItems)
+    // todo type
+    const data = req.body
+    const total = calculateTotal(data.lineItems, data.taxes)
     const invoice = await Invoice.create({
       ...data,
-      ...totals
+      total
     })
 
     return res.status(201).json(invoice)
   },
 
-  update(req: Request, res: Response) {
+  async update(req: Request, res: Response) {
     const {
       id,
       refNo,
@@ -105,32 +114,37 @@ export default {
       dueDate,
       notes,
       lineItems,
-      clientId
+      clientId,
+      taxes
     } = req.body
 
-    const { subtotal, tax, total } = calculateTotals(lineItems)
-
-    Invoice.update({
-      refNo,
-      issueDate,
-      dueDate,
-      notes,
-      lineItems,
-      subtotal,
-      tax,
-      total,
-      clientId
-    }, {
-      where: {
-        id: Number(id),
-        userId: Number(req.body.userId)
+    const total = calculateTotal(lineItems, taxes)
+    try {
+      const invoice: Invoice | null = await Invoice.findOne({
+        where: {
+          id: Number(id),
+          userId: Number(req.body.userId)
+        },
+        include: [{ model: Tax, as: 'taxes' }]
+      })
+      if (invoice) {
+        invoice.set({
+          refNo,
+          issueDate,
+          dueDate,
+          notes,
+          lineItems,
+          total,
+          clientId
+        })
+        console.log('saving....')
+        invoice.setTaxes(taxes.map((tax: Tax) => tax.id))
+        await invoice.save()
+        return res.status(200).json(invoice)
       }
-    }).then(() => {
-      return res.sendStatus(204)
-    }).catch((err: Error) => {
-      console.warn(err)
-      return res.sendStatus(500)
-    })
+    } catch (err: any) {
+      return res.status(400).json(err)
+    }
   },
 
   async destroy(req: Request, res: Response) {

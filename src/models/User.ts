@@ -4,6 +4,7 @@ import { sequelize } from '@models/index'
 import Client from './Client'
 import Invoice from './Invoice'
 import Profile from './Profile'
+import Tax from './Tax'
 
 export default class User extends Model<_User, _UserInput> implements _User {
   public id!: number
@@ -57,8 +58,12 @@ User.init({
 User.hasMany(Invoice)
 User.hasMany(Client)
 User.hasOne(Profile)
-Profile.belongsTo(User)
+User.hasMany(Tax)
 Invoice.belongsTo(User)
+Invoice.belongsTo(Client)
+Invoice.belongsToMany(Tax, { through: 'invoices_taxes' })
 Client.belongsTo(User)
 Client.hasMany(Invoice)
-Invoice.belongsTo(Client)
+Profile.belongsTo(User)
+Tax.belongsTo(User)
+Tax.belongsToMany(Invoice, { through: 'invoices_taxes' })

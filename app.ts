@@ -8,6 +8,7 @@ import clientRoutes from './src/router/clients'
 import dashboardRoutes from './src/router/dashboard'
 import invoiceRoutes from './src/router/invoices'
 import reportRoutes from './src/router/reports'
+import taxRoutes from './src/router/taxes'
 import process from 'process'
 
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
@@ -23,6 +24,7 @@ app.use('/clients', clientRoutes)
 app.use('/dashboard', dashboardRoutes)
 app.use('/invoices', invoiceRoutes)
 app.use('/reports', reportRoutes)
+app.use('/taxes', taxRoutes)
 app.use('/users', userRoutes)
 
 app.use((req, res, next) => {
