@@ -4,6 +4,7 @@ import { Model, DataTypes, Optional } from 'sequelize'
 import { sequelize } from '@models/index'
 import { _Invoice, _LineItem, _InvoiceStatus } from '@jimmyjames88/freebooks-types'
 import Tax from './Tax'
+import Payment from './Payment'
 
 export default class Invoice extends Model<_Invoice, _InvoiceInput> implements _Invoice {
   public id!: number
@@ -17,7 +18,9 @@ export default class Invoice extends Model<_Invoice, _InvoiceInput> implements _
   public lineItems!: _LineItem[]
   public total!: number
   public taxes!: Tax[]
+  public payments!: Payment[]
   public setTaxes!: Function
+  public createPayment!: Function
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 }

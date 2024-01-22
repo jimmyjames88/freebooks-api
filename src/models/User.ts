@@ -5,6 +5,7 @@ import Client from './Client'
 import Invoice from './Invoice'
 import Profile from './Profile'
 import Tax from './Tax'
+import Payment from './Payment'
 
 export default class User extends Model<_User, _UserInput> implements _User {
   public id!: number
@@ -59,11 +60,17 @@ User.hasMany(Invoice)
 User.hasMany(Client)
 User.hasOne(Profile)
 User.hasMany(Tax)
+User.hasMany(Payment)
 Invoice.belongsTo(User)
 Invoice.belongsTo(Client)
 Invoice.belongsToMany(Tax, { through: 'invoices_taxes' })
+Invoice.hasMany(Payment)
 Client.belongsTo(User)
 Client.hasMany(Invoice)
+Client.hasMany(Payment)
 Profile.belongsTo(User)
 Tax.belongsTo(User)
 Tax.belongsToMany(Invoice, { through: 'invoices_taxes' })
+Payment.belongsTo(Invoice)
+Payment.belongsTo(User)
+Payment.belongsTo(Client)

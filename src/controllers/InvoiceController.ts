@@ -6,6 +6,7 @@ import Client from '@models/Client'
 import User from '@models/User'
 import Profile from '@models/Profile'
 import Tax from '@models/Tax'
+import Payment from '@models/Payment'
 
 const calculateTotal = (lineItems: _LineItem[], taxes: _Tax[]) => {
   // calculate subtotal, but remove any line items where rate or quantity are either missing or are not a number
@@ -58,6 +59,12 @@ export default {
         options.order = [[ sortBy.key, sortBy.order ]]
       }
     }
+    if (req.query.clientId) {
+      options.where = {
+        ...options.where,
+        clientId: req.query.clientId
+      }
+    }
     if (req.query.filters) {
       const filters = req.query.filters as any
       if (filters.custom.pastDue) {
@@ -88,7 +95,8 @@ export default {
       include: [
         { model: Client, as: 'client' },
         { model: User, as: 'user', attributes: ['id'], include: [ { model: Profile, as: 'profile' } ] },
-        { model: Tax, as: 'taxes'}
+        { model: Tax, as: 'taxes' },
+        { model: Payment, as: 'payments' }
       ]
     })
     return res.json(invoice)

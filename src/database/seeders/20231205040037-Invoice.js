@@ -5,7 +5,7 @@ const { faker } = require('@faker-js/faker')
 module.exports = {
   async up (queryInterface, Sequelize) {
     const invoiceNum = Math.floor(Math.random()*90000) + 10000;
-    const statuses = ['draft', 'sent', 'partial', 'paid', 'void']
+    const statuses = ['draft', 'sent']
     const data = [...Array(300).keys()].map((i) => {
       const status = statuses[Math.floor(Math.random() * statuses.length)]
 

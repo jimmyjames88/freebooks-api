@@ -7,7 +7,8 @@ import authRoutes from './src/router/auth'
 import clientRoutes from './src/router/clients'
 import dashboardRoutes from './src/router/dashboard'
 import invoiceRoutes from './src/router/invoices'
-import reportRoutes from './src/router/reports'
+import paymentRoutes from './src/router/payments'
+// import reportRoutes from './src/router/reports'
 import taxRoutes from './src/router/taxes'
 import process from 'process'
 
@@ -23,7 +24,8 @@ app.use('/auth', authRoutes)
 app.use('/clients', clientRoutes)
 app.use('/dashboard', dashboardRoutes)
 app.use('/invoices', invoiceRoutes)
-app.use('/reports', reportRoutes)
+app.use('/payments', paymentRoutes)
+// app.use('/reports', reportRoutes)
 app.use('/taxes', taxRoutes)
 app.use('/users', userRoutes)
 
