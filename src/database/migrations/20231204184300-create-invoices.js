@@ -17,7 +17,7 @@ module.exports = {
       },
       status: {
         type: Sequelize.STRING,
-        defaultValue: 'DRAFT'
+        defaultValue: 'Draft'
       },
       issueDate: {
         type: Sequelize.DATEONLY

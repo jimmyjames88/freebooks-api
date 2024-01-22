@@ -13,7 +13,7 @@ export default class Client extends Model<_Client, _ClientInput> implements _Cli
   public phone!: string
   public website!: string
   public address!: _Address
-  public readonly userId?: number
+  public userId?: number
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
   public invoices?: Invoice[]

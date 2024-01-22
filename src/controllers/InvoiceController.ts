@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { Op, FindOptions } from 'sequelize'
-import { _Invoice, _LineItem, _Tax } from '@jimmyjames88/freebooks-types'
+import { _Invoice, _InvoiceStatus, _LineItem, _Tax } from '@jimmyjames88/freebooks-types'
 import Invoice, { _InvoiceInput } from '@models/Invoice'
 import Client from '@models/Client'
 import User from '@models/User'
@@ -71,7 +71,11 @@ export default {
         options.where = {
           ...options.where,
           dueDate: { [Op.lt]: new Date() },
-          status: ['draft', 'sent', 'partial']
+          status: [
+            _InvoiceStatus.DRAFT,
+            _InvoiceStatus.SENT,
+            _InvoiceStatus.PARTIAL
+          ]
         }
       }
     }
@@ -115,38 +119,32 @@ export default {
   },
 
   async update(req: Request, res: Response) {
-    const {
-      id,
-      refNo,
-      issueDate,
-      dueDate,
-      notes,
-      lineItems,
-      clientId,
-      taxes
-    } = req.body
+    const allowed = ['id', 'userId', 'clientId', 'refNo', 'status', 'issueDate', 'dueDate', 'notes', 'lineItems', 'taxes']
+    const data: Partial<Invoice> = Object.keys(req.body).filter(key => allowed.includes(key)).reduce((obj: any, key) => {
+      obj[key] = req.body[key]
+      return obj
+    }, {})
 
-    const total = calculateTotal(lineItems, taxes)
+
+    console.log('DATA', data)
+
+
+
     try {
       const invoice: Invoice | null = await Invoice.findOne({
         where: {
-          id: Number(id),
+          id: Number(data.id),
           userId: Number(req.body.userId)
         },
         include: [{ model: Tax, as: 'taxes' }]
       })
       if (invoice) {
-        invoice.set({
-          refNo,
-          issueDate,
-          dueDate,
-          notes,
-          lineItems,
-          total,
-          clientId
-        })
+
+        const total = data.lineItems?.length ? calculateTotal(data.lineItems, data.taxes as Tax[]) : undefined
+
+        invoice.set(data)
         console.log('saving....')
-        invoice.setTaxes(taxes.map((tax: Tax) => tax.id))
+        invoice.setTaxes(data.taxes?.map((tax: Tax) => tax.id))
         await invoice.save()
         return res.status(200).json(invoice)
       }
