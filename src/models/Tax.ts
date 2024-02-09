@@ -7,7 +7,7 @@ import { sequelize } from '@models/index'
 
 export default class Tax extends Model<_Tax, _TaxInput> implements _Tax {
   public id!: number
-  public userId!: number
+  public UserId!: number
   public name!: string
   public rate!: number
   public type!: _TaxType
@@ -16,7 +16,7 @@ export default class Tax extends Model<_Tax, _TaxInput> implements _Tax {
   public readonly updatedAt!: Date
 }
 
-export interface _TaxInput extends Optional<_Tax, 'userId'> {}
+export interface _TaxInput extends Optional<_Tax, 'UserId'> {}
 export interface _TaxOutput extends Required<_Tax> {}
 
 Tax.init({
@@ -42,7 +42,7 @@ Tax.init({
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
-  userId: DataTypes.INTEGER,
+  UserId: DataTypes.INTEGER,
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
@@ -53,6 +53,6 @@ Tax.init({
   }
 }, {
   sequelize,
-  modelName: 'tax',
+  modelName: 'Tax',
   tableName: 'taxes'
 })

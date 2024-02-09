@@ -4,13 +4,13 @@ import { sequelize } from '@models/index'
 
 export default class Payment extends Model<_Payment, _PaymentInput> implements _Payment {
   public id!: number
-  public userId!: number
-  public clientId!: number
-  public invoiceId!: number
+  public UserId!: number
+  public ClientId!: number
+  public InvoiceId!: number
+  public paymentTypeId!: number
   public date!: Date
   public description!: string
   public amount!: number
-  public type!: _PaymentType
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 }
@@ -24,15 +24,19 @@ Payment.init({
     autoIncrement: true,
     primaryKey: true
   },
-  userId: {
+  UserId: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  clientId: {
+  ClientId: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  invoiceId: {
+  InvoiceId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  paymentTypeId: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
@@ -48,10 +52,6 @@ Payment.init({
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false
   },
-  type: {
-    type: DataTypes.JSON,
-    allowNull: false
-  },
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
@@ -62,6 +62,6 @@ Payment.init({
   }
 }, {
   sequelize,
-  modelName: 'payment',
+  modelName: 'Payment',
   tableName: 'payments'
 })

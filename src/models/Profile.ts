@@ -3,7 +3,7 @@ import { _Address, _Profile } from '@jimmyjames88/freebooks-types'
 import { sequelize } from '@models/index'
 
 export default class Profile extends Model<_Profile, _ProfileInput> implements _Profile {
-  public userId!: number
+  public UserId!: number
   public displayName!: string
   public displayEmail!: string
   public phone?: string
@@ -12,11 +12,11 @@ export default class Profile extends Model<_Profile, _ProfileInput> implements _
   public readonly updatedAt!: Date
 }
 
-export interface _ProfileInput extends Optional<_Profile, 'userId' | 'displayName' | 'displayEmail' | 'address' | 'createdAt' | 'updatedAt'> {}
+export interface _ProfileInput extends Optional<_Profile, 'UserId' | 'displayName' | 'displayEmail' | 'address' | 'createdAt' | 'updatedAt'> {}
 export interface _ProfileOutput extends Required<_Profile> {}
 
 Profile.init({
-  userId: {
+  UserId: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
@@ -43,6 +43,6 @@ Profile.init({
   }
 }, {
   sequelize,
-  modelName: 'profile',
+  modelName: 'Profile',
   tableName: 'profiles'
 })

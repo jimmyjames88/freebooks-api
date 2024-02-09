@@ -1,5 +1,3 @@
-// Create a Sequelize model for the Client table based on the mongoose model in ./Client.old.ts
-
 import { Model, DataTypes, Optional } from 'sequelize'
 import { _Address, _Client } from '@jimmyjames88/freebooks-types'
 import { sequelize } from '@models/index'
@@ -13,7 +11,7 @@ export default class Client extends Model<_Client, _ClientInput> implements _Cli
   public phone!: string
   public website!: string
   public address!: _Address
-  public userId?: number
+  public UserId?: number
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
   public invoices?: Invoice[]
@@ -39,9 +37,9 @@ Client.init({
   phone: DataTypes.STRING,
   website: DataTypes.STRING,
   address: DataTypes.JSON,
-  userId: DataTypes.INTEGER
+  UserId: DataTypes.INTEGER
 }, {
   sequelize,
-  modelName: 'client',
+  modelName: 'Client',
   tableName: 'clients'
 })
