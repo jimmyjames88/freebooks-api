@@ -1,11 +1,8 @@
 // Create a Sequelize model for the Invoice table based on the mongoose model in ./Invoice.old.ts
 
 import { Model, DataTypes, Optional } from 'sequelize'
-import { sequelize } from '@models/index'
+import { Expense, Payment, sequelize, Tax } from '@models/index'
 import { _Invoice, _LineItem, _InvoiceStatus, _Tax, _TaxType } from '@jimmyjames88/freebooks-types'
-import Tax from './Tax'
-import Expense from './Expense'
-import Payment from './Payment'
 
 const GUARDED = ['UserId', 'ClientId']
 

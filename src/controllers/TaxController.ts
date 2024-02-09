@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
-import Tax from '@models/Tax'
-import { BaseError } from 'sequelize'
+import { Tax } from '@models/index'
 
 export default {
   async index(req: Request, res: Response) {

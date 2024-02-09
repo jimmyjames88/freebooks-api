@@ -2,8 +2,7 @@ import { Request, Response } from 'express'
 import { compare, hash } from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { _User } from '@jimmyjames88/freebooks-types'
-import User from '@models/User'
-import Profile from '@models/Profile'
+import { Profile, User } from '@models/index'
 
 export default {
   

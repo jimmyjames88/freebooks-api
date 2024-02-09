@@ -1,13 +1,8 @@
 import { Model, DataTypes, Optional } from 'sequelize'
 import { _Profile, _User } from '@jimmyjames88/freebooks-types'
-import { sequelize } from '@models/index'
-import Client from './Client'
-import Expense from './Expense'
-import Invoice from './Invoice'
-import Payment from './Payment'
-import PaymentType from './PaymentType'
-import Profile from './Profile'
-import Tax from './Tax'
+import { 
+  Client, Expense, Invoice, Payment, PaymentType, Profile, sequelize, Tax
+} from '@models/index'
 
 export class User extends Model<_User, _UserInput> implements _User {
   public id!: number

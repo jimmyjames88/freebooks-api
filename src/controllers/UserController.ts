@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
-import User from '@models/User'
-import Profile from '@models/Profile'
+import { Profile, User } from '@models/index'
 
 export default {
   async show(req: Request, res: Response) {

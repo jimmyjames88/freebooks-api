@@ -1,8 +1,7 @@
 import { Request, Response } from 'express'
 import { Op, FindOptions } from 'sequelize'
 import { _Collection } from '@jimmyjames88/freebooks-types'
-import Client, { _ClientInput } from '@models/Client'
-import Invoice from '@models/Invoice'
+import { Client, Invoice, _ClientInput } from '@models/index'
 
 export default {
   async index(req: Request, res: Response) {

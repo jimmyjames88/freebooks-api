@@ -1,7 +1,5 @@
 import { Request, Response } from 'express'
-import { Op } from 'sequelize'
 import { _InvoiceStatus } from '@jimmyjames88/freebooks-types'
-import Invoice from '@models/Invoice'
 
 export default {
   async outstandingRevenue(req: Request, res: Response) {

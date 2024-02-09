@@ -1,8 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize'
 import { _Address, _Client } from '@jimmyjames88/freebooks-types'
-import { sequelize } from '@models/index'
-import Invoice from './Invoice'
-
+import { Invoice, sequelize } from '@models/index'
 
 export class Client extends Model<_Client, _ClientInput> implements _Client {
   public id!: number

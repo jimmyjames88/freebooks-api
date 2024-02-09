@@ -1,9 +1,6 @@
 import { Request, Response } from 'express'
-import Client from '@models/Client'
-import Invoice from '@models/Invoice'
-import Payment from '@models/Payment'
-import PaymentType from '@models/PaymentType'
 import { _InvoiceStatus } from '@jimmyjames88/freebooks-types'
+import { Client, Invoice, Payment, PaymentType } from '@models/index'
 
 export default {
   async index(req: Request, res: Response) {

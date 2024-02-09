@@ -1,15 +1,12 @@
 import { Request, Response } from 'express'
 import { Op, FindOptions } from 'sequelize'
-import { _Expense, _Invoice, _InvoiceStatus, _LineItem, _Payment, _Tax } from '@jimmyjames88/freebooks-types'
-import Invoice, { _InvoiceInput, _InvoiceOutput } from '@models/Invoice'
-import Client from '@models/Client'
-import User from '@models/User'
-import Profile from '@models/Profile'
-import Tax from '@models/Tax'
-import Payment from '@models/Payment'
-import Expense from '@models/Expense'
-import PaymentType from '@models/PaymentType'
-
+import { 
+  _Expense, _Invoice, _InvoiceStatus, _LineItem, _Payment, _Tax
+} from '@jimmyjames88/freebooks-types'
+import { 
+  Client, Expense, Invoice, Payment, PaymentType, Profile, Tax, User, _InvoiceInput,
+  _InvoiceOutput
+} from '@models/index'
 
 // todo centralize
 export interface TypedRequest<T> extends Request {
