@@ -2,35 +2,24 @@ import { Request, Response } from 'express'
 import Client from '@models/Client'
 import Invoice from '@models/Invoice'
 import Payment from '@models/Payment'
-import { _InvoiceStatus, _Payment } from '@jimmyjames88/freebooks-types'
+import PaymentType from '@models/PaymentType'
+import { _InvoiceStatus } from '@jimmyjames88/freebooks-types'
 
 export default {
   async index(req: Request, res: Response) {
     try {
       const payments = await Payment.findAll({
         where: {
-          userId: Number(req.body.userId)
+          UserId: Number(req.body.UserId)
         },
         include: [
-          {
-            model: Invoice,
-            attributes: ['id', 'refNo'],
-            include: [
-              {
-                model: Client,
-                attributes: ['id', 'name']
-              }
-            ]
-          },
-          {
-            model: Client,
-            attributes: ['id', 'name']
-          }
+          { model: Invoice, attributes: ['id', 'refNo'] },
+          { model: Client, attributes: ['id', 'name'] },
+          { model: PaymentType }
         ]
       })
-      const total = await Invoice.count({ 
-        include: Client,
-        where: { userId: Number(req.body.userId) }
+      const total = await Payment.count({ 
+        where: { UserId: Number(req.body.UserId) }
       })
       res.json({ items: payments, total }) 
     } catch (err: any) {
@@ -44,24 +33,23 @@ export default {
     try {
       const invoice = await Invoice.findOne({
         where: {
-          id: Number(req.body.invoiceId),
-          userId: Number(req.body.userId)
+          id: Number(req.body.InvoiceId),
+          UserId: Number(req.body.UserId)
         },
-        include: [{ model: Payment, as: 'payments' }]
+        include: [{ model: Payment }]
       })
 
       if (invoice) {
         const payment = await invoice.createPayment(req.body)
-        invoice.payments.push(payment)
-        const paymentTotal = invoice.payments.reduce((acc, payment: _Payment) => {
+        invoice.Payments.push(payment)
+        const paymentTotal = invoice.Payments.reduce((acc, payment: Payment) => {
           return acc + payment.amount
         }, 0)
-        console.log('>>>>', paymentTotal, invoice.total)
-        if (paymentTotal >= invoice.total) {
-          console.log('###########')
-          invoice.status = _InvoiceStatus.PAID
-          await invoice.save()
-        }
+        // if (paymentTotal >= invoice.total) {
+        //   console.log('###########')
+        //   invoice.status = _InvoiceStatus.PAID
+        //   await invoice.save()
+        // }
         return res.status(201).json(payment)
       }
     } catch (err: any) {
@@ -76,13 +64,13 @@ export default {
       const payment = await Payment.findOne({
         where: {
           id: Number(req.body.id),
-          userId: Number(req.body.userId)
+          UserId: Number(req.body.UserId)
         }
       })
       if (payment) {
         payment.set({
           ...req.body,
-          userId: Number(req.body.userId)
+          UserId: Number(req.body.UserId)
         })
         await payment.save()
         res.send(payment)
@@ -99,7 +87,7 @@ export default {
       const payment = await Payment.findOne({
         where: {
           id: Number(req.body.id),
-          userId: Number(req.body.userId)
+          UserId: Number(req.body.UserId)
         }
       })
       if (payment) {
@@ -113,4 +101,16 @@ export default {
     }
   },
   
+  async types(req: Request, res: Response) {
+    try {
+      const types = await PaymentType.findAll()
+      res.json(types)
+    } catch (err: any) {
+      console.warn(err.message)
+
+      res.status(500).send({
+        error: err.message
+      })
+    }
+  }
 }

@@ -13,7 +13,7 @@ export default {
     const match = user && await compare(password, user.password as string)
     if (match) {
       const token = jwt.sign(
-        { userId: user.id },
+        { UserId: user.id },
         process.env.NODE_APP_SECRET as jwt.Secret,
         { expiresIn: "15 minutes" }
       )
@@ -36,7 +36,7 @@ export default {
     })
 
     await Profile.create({
-      userId: user.id,
+      UserId: user.id,
       displayEmail: email,
       displayName: name
     })

@@ -4,7 +4,7 @@ import Profile from '@models/Profile'
 
 export default {
   async show(req: Request, res: Response) {
-    const user: User | null = await User.findByPk(req.body.userId, { include: Profile })
+    const user: User | null = await User.findByPk(req.body.UserId, { include: Profile })
     if (user) {
       return res.json({
         id: user.id,
@@ -18,10 +18,7 @@ export default {
 
   async update(req: Request, res: Response) {
     const { profile }: User = req.body
-    const user: User | null = await User.findByPk(req.body.userId, { include: {
-      model: Profile,
-      as: 'profile'
-    } })
+    const user: User | null = await User.findByPk(req.body.UserId, { include: { model: Profile }})
     if (user)  {
       user.profile?.set({ ...profile })
       await user.profile?.save()
@@ -32,7 +29,7 @@ export default {
   },
 
   async destroy(req: Request, res: Response) {
-    const user = await User.findByPk(req.params.userId)
+    const user = await User.findByPk(req.params.UserId)
     if (user)
       await user.destroy()
     return res.json(user)

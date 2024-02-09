@@ -5,7 +5,7 @@ import { BaseError } from 'sequelize'
 export default {
   async index(req: Request, res: Response) {
     const taxes = await Tax.findAll({
-      where: { userId: Number(req.body.userId) }
+      where: { UserId: Number(req.body.UserId) }
     })
     if (taxes) {
       return res.json(taxes)
@@ -29,7 +29,7 @@ export default {
     try {
       const tax = await Tax.create({
         ...req.body,
-        userId: Number(req.body.userId)
+        UserId: Number(req.body.UserId)
       })
       if (tax) {
         return res.status(201).json(tax)
@@ -45,7 +45,7 @@ export default {
       const tax = await Tax.findOne({
         where: { 
           id: req.params.taxId,
-          userId: Number(req.body.userId)
+          UserId: Number(req.body.UserId)
         }
       })
       if (tax) {
@@ -63,7 +63,7 @@ export default {
       const tax = await Tax.destroy({
         where: {
           id: req.params.taxId,
-          userId: Number(req.body.userId)
+          UserId: Number(req.body.UserId)
         }
       })
       if (tax) {

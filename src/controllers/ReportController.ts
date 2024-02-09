@@ -4,7 +4,7 @@ import Invoice from '@models/Invoice'
 export default {
   async totals(req: Request, res: Response) {
     // const invoices = await Invoice.findAll({
-    //   where: { userId: 1 }
+    //   where: { UserId: 1 }
     // })
     // if (invoices) {
     //   const totals = invoices.reduce((acc, invoice) => {

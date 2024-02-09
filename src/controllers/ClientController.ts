@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { Op, FindOptions } from 'sequelize'
+import { _Collection } from '@jimmyjames88/freebooks-types'
 import Client, { _ClientInput } from '@models/Client'
 import Invoice from '@models/Invoice'
 
@@ -7,7 +8,7 @@ export default {
   async index(req: Request, res: Response) {
     const options: FindOptions  = {
       where: { 
-        userId: Number(req.body.userId),
+        UserId: Number(req.body.UserId),
       },
       offset: (Number(req.query.page) - 1) * Number(req.query.itemsPerPage || 10) || 0,
       limit: Number(req.query.itemsPerPage) || 10
@@ -36,16 +37,19 @@ export default {
     })
   },
 
-  async list(req: Request, res: Response) {
+  async list(req: Request, res: Response): Promise<Response<_Collection<any>>> {
     const clients = await Client.findAll({ 
       attributes: [ 'id', 'name' ],
-      where: { userId: Number(req.body.userId) }
+      where: { UserId: Number(req.body.UserId) }
     })
-    return res.json(clients)
+    return res.json({
+      items: clients,
+      total: clients.length
+    })
   },
 
   async show(req: Request, res: Response) {
-    const client = await Client.findByPk(req.params.clientId, {
+    const client = await Client.findByPk(req.params.ClientId, {
       include: [
         {
           model: Invoice,
@@ -63,7 +67,7 @@ export default {
     const data: _ClientInput = req.body
     const client = new Client({
       ...data,
-      userId: Number(req.body.userId)
+      UserId: Number(req.body.UserId)
     })
     await client.save()
 
@@ -71,7 +75,7 @@ export default {
   },
 
   async edit(req: Request, res: Response) {
-    const client = await Client.findByPk(req.params.clientId)
+    const client = await Client.findByPk(req.params.ClientId)
     if (client)
       return res.json(client)
     return res.sendStatus(404)
@@ -79,7 +83,7 @@ export default {
 
   async update(req: Request, res: Response) {
     const { name, address, phone, email, website } = req.body
-    const client = await Client.findByPk(req.params.clientId)
+    const client = await Client.findByPk(req.params.ClientId)
     if (client) {
       client.set( {
         name,
@@ -97,8 +101,8 @@ export default {
   async destroy(req: Request, res: Response) {
     const client = await Client.findOne({
       where: { 
-        userId: Number(req.body.userId),
-        id: req.params.clientId
+        UserId: Number(req.body.UserId),
+        id: req.params.ClientId
       },
       include: Invoice
     })
