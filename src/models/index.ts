@@ -1,4 +1,14 @@
 import { Sequelize } from 'sequelize';
+export * from './Client'
+export * from './Expense'
+export * from './ExpensesTaxes'
+export * from './Invoice'
+export * from './InvoicesTaxes'
+export * from './Payment'
+export * from './PaymentType'
+export * from './Profile'
+export * from './Tax'
+export * from './User'
 
 const env = process.env.NODE_ENV || 'development';
 const config = require('@config/config.json')[env];
