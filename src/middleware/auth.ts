@@ -11,9 +11,9 @@ function validateToken(token: string, req: Request) {
         valid = decoded
         if (req.body) {
           // todo: evaluate this... is slapping userID here really a good idea? Could be spoofed?
-          req.body.userId = decoded.userId
+          req.body.UserId = decoded.UserId
         } else {
-          req.body = { userId: decoded.userId }
+          req.body = { UserId: decoded.UserId }
         }
       }
     }
