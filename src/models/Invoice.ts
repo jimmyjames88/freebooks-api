@@ -9,7 +9,7 @@ import Payment from './Payment'
 
 const GUARDED = ['UserId', 'ClientId']
 
-export default class Invoice extends Model<_Invoice, _InvoiceInput> implements _Invoice {
+export class Invoice extends Model<_Invoice, _InvoiceInput> implements _Invoice {
   public id!: number
   public UserId!: number
   public ClientId!: number

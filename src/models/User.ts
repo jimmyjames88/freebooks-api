@@ -9,7 +9,7 @@ import PaymentType from './PaymentType'
 import Profile from './Profile'
 import Tax from './Tax'
 
-export default class User extends Model<_User, _UserInput> implements _User {
+export class User extends Model<_User, _UserInput> implements _User {
   public id!: number
   public email!: string
   public password!: string

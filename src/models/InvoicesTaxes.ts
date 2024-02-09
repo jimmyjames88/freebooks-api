@@ -10,7 +10,7 @@ export interface _InvoicesTaxes {
   updatedAt: Date
 }
 
-export default class InvoicesTaxes extends Model<_InvoicesTaxes, _InvoicesTaxesInput> implements _InvoicesTaxes {
+export class InvoicesTaxes extends Model<_InvoicesTaxes, _InvoicesTaxesInput> implements _InvoicesTaxes {
   public id!: number
   public InvoiceId!: number
   public TaxId!: number

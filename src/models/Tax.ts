@@ -5,7 +5,7 @@ import { _Tax, _TaxType } from '@jimmyjames88/freebooks-types'
 import { sequelize } from '@models/index'
 
 
-export default class Tax extends Model<_Tax, _TaxInput> implements _Tax {
+export class Tax extends Model<_Tax, _TaxInput> implements _Tax {
   public id!: number
   public UserId!: number
   public name!: string

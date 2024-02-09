@@ -4,7 +4,7 @@ import { sequelize } from '@models/index'
 import Invoice from './Invoice'
 
 
-export default class Client extends Model<_Client, _ClientInput> implements _Client {
+export class Client extends Model<_Client, _ClientInput> implements _Client {
   public id!: number
   public name!: string
   public email!: string

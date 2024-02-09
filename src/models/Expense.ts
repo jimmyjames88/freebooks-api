@@ -2,7 +2,7 @@ import { Model, DataTypes, Optional } from 'sequelize'
 import { _Expense, _PaymentType, _Tax, _TaxType } from '@jimmyjames88/freebooks-types'
 import { sequelize } from '@models/index'
 
-export default class Expense extends Model<_Expense, _ExpenseInput> implements _Expense {
+export class Expense extends Model<_Expense, _ExpenseInput> implements _Expense {
   public id!: number
   public UserId!: number
   public InvoiceId?: number

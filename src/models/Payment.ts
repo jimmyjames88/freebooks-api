@@ -2,7 +2,7 @@ import { Model, DataTypes, Optional } from 'sequelize'
 import { _Payment, _PaymentType } from '@jimmyjames88/freebooks-types'
 import { sequelize } from '@models/index'
 
-export default class Payment extends Model<_Payment, _PaymentInput> implements _Payment {
+export class Payment extends Model<_Payment, _PaymentInput> implements _Payment {
   public id!: number
   public UserId!: number
   public ClientId!: number

@@ -2,7 +2,7 @@ import { Model, DataTypes, Optional } from 'sequelize'
 import { _Address, _Profile } from '@jimmyjames88/freebooks-types'
 import { sequelize } from '@models/index'
 
-export default class Profile extends Model<_Profile, _ProfileInput> implements _Profile {
+export class Profile extends Model<_Profile, _ProfileInput> implements _Profile {
   public UserId!: number
   public displayName!: string
   public displayEmail!: string
