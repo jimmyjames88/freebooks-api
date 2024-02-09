@@ -9,5 +9,6 @@ router.get('/', auth, (req: Request, res: Response) => PaymentController.index(r
 router.post('/', auth, (req: Request, res: Response) => PaymentController.store(req, res))
 router.put('/:paymentId', auth, (req: Request, res: Response) => PaymentController.update(req, res))
 router.delete('/:paymentId', auth, (req: Request, res: Response) => PaymentController.destroy(req, res))
+router.get('/types', auth, (req: Request, res: Response) => PaymentController.types(req, res))
 
 export default router

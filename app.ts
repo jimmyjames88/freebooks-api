@@ -2,14 +2,15 @@ import express from 'express'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
 import { sequelize } from './src/models/index'
-import userRoutes from './src/router/users'
 import authRoutes from './src/router/auth'
 import clientRoutes from './src/router/clients'
 import dashboardRoutes from './src/router/dashboard'
+import expenseRoutes from './src/router/expenses'
 import invoiceRoutes from './src/router/invoices'
 import paymentRoutes from './src/router/payments'
 // import reportRoutes from './src/router/reports'
 import taxRoutes from './src/router/taxes'
+import userRoutes from './src/router/users'
 import process from 'process'
 
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
@@ -23,6 +24,7 @@ app.use(cors())
 app.use('/auth', authRoutes)
 app.use('/clients', clientRoutes)
 app.use('/dashboard', dashboardRoutes)
+app.use('/expenses', expenseRoutes)
 app.use('/invoices', invoiceRoutes)
 app.use('/payments', paymentRoutes)
 // app.use('/reports', reportRoutes)
@@ -34,8 +36,8 @@ app.use((req, res, next) => {
     const authHeader = req.headers['authorization'] as string
     if (authHeader) {
       const token = authHeader.split(" ")[1]
-      const { userId } = jwt.decode(token) as any
-      req.body.userId = userId
+      const { UserId } = jwt.decode(token) as any
+      req.body.UserId = UserId
     }
   }
   
