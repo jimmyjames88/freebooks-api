@@ -23,9 +23,9 @@ module.exports = {
         issueDate: faker.date.past(),
         dueDate: faker.date.anytime(),
         notes: faker.lorem.sentence(),
-        total: parseFloat(subtotal * 1.05).toFixed(2),
-        userId: 1,
-        clientId: Math.floor(Math.random() * 100) + 1,
+        // total: parseFloat(subtotal * 1.05).toFixed(2),
+        UserId: 1,
+        ClientId: Math.floor(Math.random() * 100) + 1,
         createdAt: new Date(),
         updatedAt: new Date(),
         lineItems: JSON.stringify(lineItems)

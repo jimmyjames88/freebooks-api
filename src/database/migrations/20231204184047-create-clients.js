@@ -39,7 +39,7 @@ module.exports = {
       updatedAt: Sequelize.DATE,
 
       // Associations
-      userId: {
+      UserId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {

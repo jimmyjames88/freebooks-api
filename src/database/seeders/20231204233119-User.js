@@ -17,7 +17,7 @@ module.exports = {
     }])
 
     await queryInterface.bulkInsert('profiles', [{
-      userId: 1,
+      UserId: 1,
       displayName: 'James Allen',
       displayEmail: 'billing@james-allen.ca',
       phone: '555-555-5555',

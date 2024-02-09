@@ -5,14 +5,14 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert('taxes', [
       {
-        userId: 1,
+        UserId: 1,
         name: 'GST',
         rate: 0.05,
         type: 'PERCENTAGE',
         default: true
       },
       {
-        userId: 1,
+        UserId: 1,
         name: 'DBAA',
         rate: 200.00,
         type: 'FLAT',

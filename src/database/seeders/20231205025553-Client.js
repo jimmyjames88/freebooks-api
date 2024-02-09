@@ -20,7 +20,7 @@ module.exports = {
         postal: faker.location.zipCode(),
         country: faker.location.country()
       }),
-      userId: 1,
+      UserId: 1,
       createdAt: new Date(),
       updatedAt: new Date()
     }))

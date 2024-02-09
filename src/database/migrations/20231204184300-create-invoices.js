@@ -32,20 +32,15 @@ module.exports = {
         type: Sequelize.JSON,
         defaultValue: []
       },
-      subtotal: {
-        type: Sequelize.DECIMAL(10, 2)
-      },
-      tax: {
-        type: Sequelize.DECIMAL(10, 2)
-      },
       total: {
-        type: Sequelize.DECIMAL(10, 2)
+        type: Sequelize.DECIMAL(10, 2),
+        defaultValue: 0
       },
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE,
 
       // Associations
-      userId: {
+      UserId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',
@@ -53,7 +48,7 @@ module.exports = {
         },
         allowNull: false,
       },
-      clientId: {
+      ClientId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Clients',
