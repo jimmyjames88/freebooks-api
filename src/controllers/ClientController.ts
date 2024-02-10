@@ -58,7 +58,7 @@ export default {
     ]
     })
     if (client)
-      return res.send(client)
+      return res.json(client)
     return res.sendStatus(404);
   },
 
@@ -108,8 +108,8 @@ export default {
 
     try {
       if (client) {
-        if (client.invoices) {
-          client.invoices.forEach(async (invoice) => {
+        if (client.Invoices) {
+          client.Invoices.forEach(async (invoice) => {
             await invoice.destroy()
           })
           await client.destroy()
