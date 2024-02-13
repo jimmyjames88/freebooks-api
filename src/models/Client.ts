@@ -1,21 +1,30 @@
-import { DataTypes, InferAttributes, InferCreationAttributes, Model, Optional } from 'sequelize'
+import { DataTypes, InferAttributes, InferCreationAttributes, Model, NonAttribute, Optional } from 'sequelize'
 import { _Address, _Client } from '@jimmyjames88/freebooks-types'
-import { Invoice, sequelize } from '@models/index'
+import { Invoice, User, sequelize } from '@models/index'
 
 const GUARDED = [ 'UserId', 'createdAt', 'updatedAt' ]
+
+interface _ClientAttributes extends Omit<_Client, 'Invoices' | 'User'> {
+  UserId: number
+  createdAt: Date
+  updatedAt: Date
+}
+export interface _ClientCreationAttributes extends Optional<_ClientAttributes, 'id'> {}
+
 export class Client extends Model<
-  InferAttributes<Client>,
-  InferCreationAttributes<_ClientInput>
-> implements _Client {
+  _ClientAttributes,
+  _ClientCreationAttributes
+> implements _ClientAttributes {
   public id!: number
   public name!: string
   public email!: string
   public phone?: string
   public website?: string
-  public address?: _Address
-
-  public UserId!: number
+  public address!: _Address
   public Invoices?: Invoice[]
+  public User!: User
+  public UserId!: number
+  
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 
@@ -23,17 +32,14 @@ export class Client extends Model<
     // todo - centralize
     let attributes = Object.assign({}, this.get())
     for (let a of GUARDED) {
-      delete attributes[a as keyof InferAttributes<Client>]
+      delete attributes[a as keyof _ClientAttributes]
     }
     return attributes
   }
 }
 
-export interface _ClientInput extends Optional<Client, 'id' | 'createdAt' | 'updatedAt'> {}
-
 Client.init({
   id: {
-    allowNull: false,
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true

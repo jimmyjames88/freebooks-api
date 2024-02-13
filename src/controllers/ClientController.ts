@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Op, FindOptions } from 'sequelize'
 import { _Collection } from '@jimmyjames88/freebooks-types'
-import { Client, Invoice, _ClientInput } from '@models/index'
+import { Client, Invoice, _ClientCreationAttributes } from '@models/index'
 
 export default {
   async index(req: Request, res: Response) {
@@ -63,7 +63,7 @@ export default {
   },
 
   async store(req: Request, res: Response) {
-    const data: _ClientInput = req.body
+    const data: _ClientCreationAttributes = req.body
     const client = new Client({
       ...data,
       UserId: Number(req.body.UserId)
@@ -84,7 +84,7 @@ export default {
     const { name, address, phone, email, website } = req.body
     const client = await Client.findByPk(req.params.ClientId)
     if (client) {
-      client.set( {
+      client.set({
         name,
         address,
         email,
