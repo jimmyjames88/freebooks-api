@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { _InvoiceStatus } from '@jimmyjames88/freebooks-types'
+import { _Collection, _InvoiceStatus } from '@jimmyjames88/freebooks-types'
 import { Client, Invoice, Payment, PaymentType } from '@models/index'
 
 export default {
@@ -101,7 +101,10 @@ export default {
   async types(req: Request, res: Response) {
     try {
       const types = await PaymentType.findAll()
-      res.json(types)
+      res.json({
+        items: types,
+        total: types.length 
+      })
     } catch (err: any) {
       console.warn(err.message)
 
