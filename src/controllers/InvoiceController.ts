@@ -39,18 +39,31 @@ const saveExpenses = async (invoice: Invoice, expenses: _Expense[]) => {
 }
 
 const savePayments = async(invoice: Invoice, payments: _Payment[]) => {
+  // compare incoming payments with existing payments - delete any that are not in the incoming list
+  const existingPayments = await Payment.findAll({ where: { InvoiceId: invoice.id } })
+  if (existingPayments) {
+    for (let existingPayment of existingPayments) {
+      if (!payments.find((payment: _Payment) => payment.id === existingPayment.id)) {
+        await existingPayment.destroy()
+      }
+    }
+  }
   // create new payments and update existing ones
   if (payments) {
     for (let payment of payments) {
       if (payment.id) {
         const existingPayment = await Payment.findByPk(payment.id)
         if (existingPayment) {
-          // set and save
           existingPayment.set(payment)
           await existingPayment.save()
         }
       } else {
-        await invoice.createPayment({ UserId: invoice.UserId , ...payment })
+        try {
+          payment.UserId = Number(invoice.UserId)
+          await invoice.createPayment({ ...payment })
+        } catch (err: any) {
+          console.warn(err)
+        }
       }
     }
   }
