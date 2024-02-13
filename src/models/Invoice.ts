@@ -1,12 +1,17 @@
 // Create a Sequelize model for the Invoice table based on the mongoose model in ./Invoice.old.ts
 
-import { Model, DataTypes, Optional } from 'sequelize'
+import { Model, DataTypes, InferAttributes, InferCreationAttributes, Optional } from 'sequelize'
 import { Expense, Payment, sequelize, Tax } from '@models/index'
 import { _Invoice, _LineItem, _InvoiceStatus, _Tax, _TaxType } from '@jimmyjames88/freebooks-types'
 
 const GUARDED = ['UserId', 'ClientId']
 
-export class Invoice extends Model<_Invoice, _InvoiceInput> implements _Invoice {
+interface _InvoiceAttributes extends _Invoice {}
+export interface _InvoiceCreationAttributes extends Optional<_InvoiceAttributes, 'id'> {}
+export class Invoice extends Model<
+  _InvoiceAttributes,
+  _InvoiceCreationAttributes
+> implements _InvoiceAttributes {
   public id!: number
   public UserId!: number
   public ClientId!: number
@@ -86,9 +91,6 @@ export class Invoice extends Model<_Invoice, _InvoiceInput> implements _Invoice 
   }
 }
 
-export interface _InvoiceInput extends Optional<_Invoice, 'refNo' | 'status' | 'issueDate' | 'dueDate' | 'notes' | 'lineItems'> {}
-export interface _InvoiceOutput extends Required<_Invoice> {}
-
 Invoice.init({
   id: {
     type: DataTypes.INTEGER,
@@ -109,10 +111,7 @@ Invoice.init({
   lineItems: DataTypes.JSON,
   total: DataTypes.DECIMAL(10, 2),
   UserId: DataTypes.INTEGER,
-  ClientId: DataTypes.INTEGER,
-  // expenses: DataTypes.JSON,
-  // payments: DataTypes.JSON,
-  // taxes: DataTypes.JSON
+  ClientId: DataTypes.INTEGER
 }, {
   hooks: {
     async beforeSave(invoice, options) {

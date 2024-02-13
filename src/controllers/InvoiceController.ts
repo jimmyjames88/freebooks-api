@@ -4,8 +4,7 @@ import {
   _Expense, _Invoice, _InvoiceStatus, _LineItem, _Payment, _Tax
 } from '@jimmyjames88/freebooks-types'
 import { 
-  Client, Expense, Invoice, Payment, PaymentType, Profile, Tax, User, _InvoiceInput,
-  _InvoiceOutput
+  Client, Expense, Invoice, Payment, PaymentType, Profile, Tax, User, _InvoiceCreationAttributes
 } from '@models/index'
 
 // todo centralize
@@ -57,7 +56,7 @@ const savePayments = async(invoice: Invoice, payments: _Payment[]) => {
   }
 }
 
-const saveAssociations = async (invoice: Invoice, data: _InvoiceInput ) => {
+const saveAssociations = async (invoice: Invoice, data: _InvoiceCreationAttributes ) => {
   invoice.setTaxes(data.Taxes?.map((tax: _Tax) => tax.id))
   invoice.setClient(data.Client?.id)
   
@@ -129,7 +128,7 @@ export default {
     })
   },
 
-  async show(req: Request, res: Response): Promise<Response<_InvoiceOutput>> {
+  async show(req: Request, res: Response) {
     try {
       const invoice = await Invoice.findOne({
         where: {
@@ -154,18 +153,25 @@ export default {
     }
   },
 
-  async store(req: TypedRequest<_InvoiceInput>, res: Response): Promise<Response<_InvoiceOutput>> {
-    const invoice = await Invoice.create(req.body)
-    await saveAssociations(invoice, req.body)
-    return res.status(201).json(invoice)
+  async store(req: TypedRequest<Invoice>, res: Response) {
+    const data: _InvoiceCreationAttributes = req.body
+    try {
+      const invoice = new Invoice(data)
+      await invoice.save()
+      console.log('SAVED INVOICE', invoice)
+      await saveAssociations(invoice, req.body)
+      return res.status(201).json(invoice)
+    } catch (err: any) {
+      console.warn(err)
+      return res.status(400).json({ ...err })
+    }
   },
 
-  async update(req: TypedRequest<_InvoiceInput>, res: Response): Promise<Response<_InvoiceOutput>> {
-    const data: _InvoiceInput = {
+  async update(req: TypedRequest<_InvoiceCreationAttributes>, res: Response) {
+    const data: _InvoiceCreationAttributes = {
       ...req.body,
       UserId: req.body.UserId
     }
-    
     try {
       const invoice: Invoice | null = await Invoice.findOne({
         where: {
