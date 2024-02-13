@@ -9,18 +9,21 @@ export default {
         id: user.id,
         email: user.email,
         name: user.name,
-        profile: user.profile
+        Profile: user.Profile
       })
     }
     return res.status(404).json({})
   },
 
   async update(req: Request, res: Response) {
-    const { profile }: User = req.body
-    const user: User | null = await User.findByPk(req.body.UserId, { include: { model: Profile }})
+    const data = req.body.Profile
+    const user: User | null = await User.findOne({
+      where: { id: req.body.UserId },
+      include: Profile
+    })
     if (user)  {
-      user.profile?.set({ ...profile })
-      await user.profile?.save()
+      user.Profile?.set({ ...data })
+      await user.Profile?.save()
       await user.save()
       return res.status(200).json(user)
     }

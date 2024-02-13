@@ -9,7 +9,7 @@ export class User extends Model<_User, _UserInput> implements _User {
   public email!: string
   public password!: string
   public name!: string
-  public profile?: Profile
+  public Profile?: Profile
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 }
