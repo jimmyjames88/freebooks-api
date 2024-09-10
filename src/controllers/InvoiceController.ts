@@ -104,7 +104,7 @@ export default {
     }
     if (req.query.sortBy) {
       let [ sortBy ] = req.query.sortBy as any
-      if (sortBy.key === 'client.name') {
+      if (sortBy.key.toLowerCase() === 'client.name') {
         options.order = [ [{ model: Client, as: 'Client' }, 'name', sortBy.order] ]
       } else {
         options.order = [[ sortBy.key, sortBy.order ]]
