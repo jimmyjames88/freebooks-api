@@ -17,6 +17,16 @@ export interface TypedResponse<T> extends Response {
 }
 
 const saveExpenses = async (invoice: Invoice, expenses: _Expense[]) => {
+  // compare incoming expenses with existing expenses - unassociate them from this invoice if they are not in the incoming list
+  const existingExpenses = await Expense.findAll({ where: { InvoiceId: invoice.id } })
+  if (existingExpenses) {
+    for (let existingExpense of existingExpenses) {
+      if (!expenses.find((expense: _Expense) => expense.id === existingExpense.id)) {
+        await existingExpense.update({ InvoiceId: null })
+      }
+    }
+  }
+
   // create new expenses and update existing ones
   if (expenses) {
     for (let expense of expenses) {
