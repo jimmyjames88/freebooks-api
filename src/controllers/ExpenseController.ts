@@ -16,6 +16,14 @@ export default {
         attributes: ['id', 'refNo']
       }]
     }
+
+    if(req.query.unattached) {
+      options.where = {
+        ...options.where,
+        InvoiceId: null
+      }
+    }
+
     if (req.query.sortBy) {
       let [sortBy] = req.query.sortBy as any
       if (sortBy.key === 'invoice.refNo') {
