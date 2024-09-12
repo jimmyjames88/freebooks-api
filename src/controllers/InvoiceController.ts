@@ -33,7 +33,7 @@ const saveExpenses = async (invoice: Invoice, expenses: _Expense[]) => {
       if (expense.id) {
         const existingExpense = await Expense.findByPk(expense.id)
         if (existingExpense) {
-          existingExpense.set(expense)
+          existingExpense.set({ ...expense, InvoiceId: invoice.id })
           await existingExpense.save()
         }
       } else {
@@ -64,7 +64,7 @@ const savePayments = async(invoice: Invoice, payments: _Payment[]) => {
       if (payment.id) {
         const existingPayment = await Payment.findByPk(payment.id)
         if (existingPayment) {
-          existingPayment.set(payment)
+          existingPayment.set({ ...payment, InvoiceId: invoice.id })
           await existingPayment.save()
         }
       } else {
