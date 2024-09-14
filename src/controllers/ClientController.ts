@@ -48,15 +48,19 @@ export default {
   },
 
   async show(req: Request, res: Response) {
-    const client = await Client.findByPk(req.params.ClientId, {
-      include: [
-        {
-          model: Invoice,
-          limit: 3,
-          order: [ [ 'updatedAt', 'DESC' ] ]
-        }
-    ]
-    })
+    const options: any = {
+      include: [] ,
+    }
+    console.log(req.query.include)
+    if (req.query.include && (req.query.include as string).split(',')?.includes('Invoices')) {
+      options.include.push({
+        model: Invoice,
+        limit: 3,
+        order: [ [ 'updatedAt', 'DESC' ] ]
+      })
+    }
+
+    const client = await Client.findByPk(req.params.ClientId, options)
     if (client)
       return res.json(client)
     return res.sendStatus(404);
