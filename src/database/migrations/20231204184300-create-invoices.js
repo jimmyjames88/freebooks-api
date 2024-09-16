@@ -28,7 +28,7 @@ module.exports = {
       notes: {
         type: Sequelize.STRING
       },
-      lineItems: {
+      LineItems: {
         type: Sequelize.JSON,
         defaultValue: []
       },

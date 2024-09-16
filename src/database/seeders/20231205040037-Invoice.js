@@ -9,13 +9,13 @@ module.exports = {
     const data = [...Array(300).keys()].map((i) => {
       const status = statuses[Math.floor(Math.random() * statuses.length)]
 
-      const lineItems =  [ ...Array(Math.floor(Math.random() * 20)) ].map(() => ({
+      const LineItems =  [ ...Array(Math.floor(Math.random() * 20)) ].map(() => ({
         description: faker.lorem.sentence(),
         quantity: Math.floor(Math.random() * 10) + 1,
         rate: parseFloat(faker.finance.amount()),
       }))
 
-      const subtotal = lineItems.reduce((acc, item) => acc + (item.quantity * item.rate), 0)
+      const subtotal = LineItems.reduce((acc, item) => acc + (item.quantity * item.rate), 0)
 
       return {
         refNo: `INV-${invoiceNum + i}`,
@@ -28,7 +28,7 @@ module.exports = {
         ClientId: Math.floor(Math.random() * 100) + 1,
         createdAt: new Date(),
         updatedAt: new Date(),
-        lineItems: JSON.stringify(lineItems)
+        LineItems: JSON.stringify(LineItems)
       }
     })
 

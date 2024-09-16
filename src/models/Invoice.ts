@@ -20,7 +20,7 @@ export class Invoice extends Model<
   public issueDate!: Date
   public dueDate!: Date
   public notes!: string
-  public lineItems!: _LineItem[]
+  public LineItems!: _LineItem[]
   public total!: number
   public Taxes!: Tax[]
   public Payments!: Payment[]
@@ -39,7 +39,7 @@ export class Invoice extends Model<
   public readonly updatedAt!: Date
 
   public calculateSubtotal(): number {
-    return this.lineItems.reduce((acc, item) => {
+    return this.LineItems.reduce((acc, item) => {
       if (!item.quantity || !item.rate) return acc
       return acc + (item.quantity * item.rate)
     }, 0)
@@ -108,7 +108,7 @@ Invoice.init({
   issueDate: DataTypes.DATE,
   dueDate: DataTypes.DATE,
   notes: DataTypes.STRING,
-  lineItems: DataTypes.JSON,
+  LineItems: DataTypes.JSON,
   total: DataTypes.DECIMAL(10, 2),
   UserId: DataTypes.INTEGER,
   ClientId: DataTypes.INTEGER
