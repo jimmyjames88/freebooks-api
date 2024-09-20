@@ -92,7 +92,7 @@ const saveAssociations = async (invoice: Invoice, data: _InvoiceCreationAttribut
 export default {
   async index(req: Request, res: Response) {
     const options: FindOptions = {
-      attributes: { include: ['total'] },
+      attributes: { include: ['total'], exclude: ['LineItems'] },
       where: { 
         UserId: Number(req.body.UserId),
       },
