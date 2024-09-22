@@ -6,7 +6,7 @@ export class Profile extends Model<_Profile, _ProfileInput> implements _Profile 
   public UserId!: number
   public displayName!: string
   public displayEmail!: string
-  public phone?: string
+  public phone!: string
   public address!: _Address
   public readonly createdAt!: Date
   public readonly updatedAt!: Date

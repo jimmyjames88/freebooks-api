@@ -1,12 +1,18 @@
 import { Model, DataTypes, Optional } from 'sequelize'
-import { _Payment, _PaymentType } from '@jimmyjames88/freebooks-types'
+import { 
+  _Payment, _PaymentType, _PaymentInputCreate, _PaymentInputUpdate
+} from '@jimmyjames88/freebooks-types'
 import { sequelize } from '@models/index'
 
-export class Payment extends Model<_Payment, _PaymentInput> implements _Payment {
+export class Payment extends Model<
+  Optional<_Payment, 'PaymentType'>,
+  _PaymentInputCreate | _PaymentInputUpdate
+> implements _Payment {
   public id!: number
   public UserId!: number
   public ClientId!: number
   public InvoiceId!: number
+  public PaymentType!: _PaymentType
   public paymentTypeId!: number
   public date!: Date
   public description!: string
@@ -14,9 +20,6 @@ export class Payment extends Model<_Payment, _PaymentInput> implements _Payment 
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 }
-
-export interface _PaymentInput extends Optional<_Payment, 'id'> {}
-export interface _PaymentOutput extends Required<_Payment> {}
 
 Payment.init({
   id: {

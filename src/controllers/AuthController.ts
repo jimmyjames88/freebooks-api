@@ -37,7 +37,16 @@ export default {
     await Profile.create({
       UserId: user.id,
       displayEmail: email,
-      displayName: name
+      displayName: name,
+      phone: '',
+      address: {
+        line1: '',
+        line2: '',
+        city: '',
+        state: '',
+        postal: '',
+        country: ''
+      }
     })
 
     return res.status(201).json(user)

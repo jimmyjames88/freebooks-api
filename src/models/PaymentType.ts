@@ -10,7 +10,7 @@ export class PaymentType extends Model<_PaymentType, _PaymentTypeInput> implemen
   public readonly updatedAt!: Date
 }
 
-export interface _PaymentTypeInput extends Optional<_PaymentType, 'id'> {}
+export interface _PaymentTypeInput extends Optional<_PaymentType, 'id' | 'createdAt' | 'updatedAt'> {}
 export interface _PaymentOutputType extends Required<_PaymentType> {}
 
 PaymentType.init({
@@ -25,6 +25,14 @@ PaymentType.init({
   },
   icon: {
     type: DataTypes.STRING
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
   }
 }, {
   sequelize,

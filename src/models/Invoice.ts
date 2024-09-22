@@ -10,8 +10,7 @@ interface _InvoiceAttributes extends _Invoice {}
 export interface _InvoiceCreationAttributes extends Optional<_InvoiceAttributes, 'id'> {}
 export class Invoice extends Model<
   _InvoiceAttributes,
-  _InvoiceCreationAttributes
-> implements _InvoiceAttributes {
+  _InvoiceCreationAttributes > implements _InvoiceAttributes {
   public id!: number
   public UserId!: number
   public ClientId!: number

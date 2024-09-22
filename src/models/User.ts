@@ -1,21 +1,21 @@
 import { Model, DataTypes, Optional } from 'sequelize'
-import { _Profile, _User } from '@jimmyjames88/freebooks-types'
+import { _Profile, _User, _UserInputCreate, _UserInputUpdate } from '@jimmyjames88/freebooks-types'
 import { 
   Client, Expense, Invoice, Payment, PaymentType, Profile, sequelize, Tax
 } from '@models/index'
 
-export class User extends Model<_User, _UserInput> implements _User {
+export class User extends Model<
+  Optional<_User, 'Profile'>,
+  _UserInputCreate | _UserInputUpdate
+> implements _User {
   public id!: number
   public email!: string
   public password!: string
   public name!: string
-  public Profile?: Profile
+  public Profile!: Profile
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 }
-
-export interface _UserInput extends Optional<_User, 'id' | 'createdAt' | 'updatedAt'> {}
-export interface _UserOutput extends Required<_User> {}
 
 User.init({
   id: {
