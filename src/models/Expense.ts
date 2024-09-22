@@ -12,7 +12,7 @@ export class Expense extends Model<
   public UserId!: number
   public InvoiceId!: number
   public PaymentType!: PaymentType
-  public paymentTypeId!: number
+  public PaymentTypeId!: number
   public date!: Date
   public description!: string
   public subtotal!: number
@@ -41,7 +41,7 @@ Expense.init({
   },
   UserId: DataTypes.INTEGER,
   InvoiceId: DataTypes.INTEGER,
-  paymentTypeId: DataTypes.INTEGER,
+  PaymentTypeId: DataTypes.INTEGER,
   date: DataTypes.DATE,
   description: DataTypes.STRING,
   subtotal: DataTypes.DECIMAL(8, 2),

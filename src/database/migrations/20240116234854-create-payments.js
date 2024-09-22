@@ -18,7 +18,7 @@ module.exports = {
       UserId: {
         type: Sequelize.INTEGER
       },
-      paymentTypeId: {
+      PaymentTypeId: {
         type: Sequelize.INTEGER
       },
       date: {

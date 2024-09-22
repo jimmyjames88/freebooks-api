@@ -13,7 +13,7 @@ export class Payment extends Model<
   public ClientId!: number
   public InvoiceId!: number
   public PaymentType!: _PaymentType
-  public paymentTypeId!: number
+  public PaymentTypeId!: number
   public date!: Date
   public description!: string
   public amount!: number
@@ -39,7 +39,7 @@ Payment.init({
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  paymentTypeId: {
+  PaymentTypeId: {
     type: DataTypes.INTEGER,
     allowNull: false
   },

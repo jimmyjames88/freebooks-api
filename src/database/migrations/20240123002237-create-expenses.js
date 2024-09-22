@@ -23,7 +23,7 @@ module.exports = {
           key: 'id'
         }
       },
-      paymentTypeId: {
+      PaymentTypeId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'paymentTypes',
