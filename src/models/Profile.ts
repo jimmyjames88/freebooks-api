@@ -1,8 +1,13 @@
 import { Model, DataTypes, Optional } from 'sequelize'
-import { _Address, _Profile } from '@jimmyjames88/freebooks-types'
+import {
+  _Address, _Profile, _ProfileInputCreate, _ProfileInputUpdate
+} from '@jimmyjames88/freebooks-types'
 import { sequelize } from '@models/index'
 
-export class Profile extends Model<_Profile, _ProfileInput> implements _Profile {
+export class Profile extends Model<
+  _Profile,
+  _ProfileInputCreate | _ProfileInputUpdate
+> implements _Profile {
   public UserId!: number
   public displayName!: string
   public displayEmail!: string
@@ -11,9 +16,6 @@ export class Profile extends Model<_Profile, _ProfileInput> implements _Profile 
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 }
-
-export interface _ProfileInput extends Optional<_Profile, 'UserId' | 'displayName' | 'displayEmail' | 'address' | 'createdAt' | 'updatedAt'> {}
-export interface _ProfileOutput extends Required<_Profile> {}
 
 Profile.init({
   UserId: {

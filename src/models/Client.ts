@@ -18,13 +18,12 @@ export class Client extends Model<
   public id!: number
   public name!: string
   public email!: string
-  public phone?: string
-  public website?: string
+  public phone!: string
+  public website!: string
   public address!: _Address
-  public Invoices?: Invoice[]
+  public Invoices!: Invoice[]
   public User!: User
   public UserId!: number
-  
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 

@@ -9,16 +9,16 @@ export interface _ExpensesTaxes {
   updatedAt: Date
 }
 
-export class ExpensesTaxes extends Model<_ExpensesTaxes, _ExpensesTaxesInput> implements _ExpensesTaxes {
+export class ExpensesTaxes extends Model<
+  _ExpensesTaxes,
+  Optional<_ExpensesTaxes, 'id'>
+> implements _ExpensesTaxes {
   public id!: number
   public ExpenseId!: number
   public TaxId!: number
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 }
-
-export interface _ExpensesTaxesInput extends Optional<_ExpensesTaxes, 'id'> {}
-export interface _ExpensesTaxesOutput extends Required<_ExpensesTaxes> {}
 
 ExpensesTaxes.init({
   id: {

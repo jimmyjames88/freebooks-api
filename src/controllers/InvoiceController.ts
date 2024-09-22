@@ -1,16 +1,13 @@
 import { Request, Response } from 'express'
 import { Op, FindOptions } from 'sequelize'
 import { 
-  _Expense, _Invoice, _InvoiceStatus, _LineItem, _Payment, _Tax
+  _Expense, _Invoice, _InvoiceStatus, _InvoiceInputCreate, _LineItem, _Payment, _Tax
 } from '@jimmyjames88/freebooks-types'
 import { 
-  Client, Expense, Invoice, Payment, PaymentType, Profile, Tax, User, _InvoiceCreationAttributes
+  Client, Expense, Invoice, Payment, PaymentType, Profile, Tax, User
 } from '@models/index'
 
 // todo centralize
-export interface TypedRequest<T> extends Request {
-  body: T
-}
 
 export interface TypedResponse<T> extends Response {
   body: T
@@ -79,7 +76,7 @@ const savePayments = async(invoice: Invoice, payments: _Payment[]) => {
   }
 }
 
-const saveAssociations = async (invoice: Invoice, data: _InvoiceCreationAttributes ) => {
+const saveAssociations = async (invoice: Invoice, data: _InvoiceInputCreate ) => {
   invoice.setTaxes(data.Taxes?.map((tax: _Tax) => tax.id))
   invoice.setClient(data.Client?.id)
   
@@ -176,8 +173,8 @@ export default {
     }
   },
 
-  async store(req: TypedRequest<Invoice>, res: Response) {
-    const data: _InvoiceCreationAttributes = req.body
+  async store(req: Request, res: Response) {
+    const data: _InvoiceInputCreate = req.body
     try {
       const invoice = new Invoice(data)
       await invoice.save()
@@ -190,8 +187,8 @@ export default {
     }
   },
 
-  async update(req: TypedRequest<_InvoiceCreationAttributes>, res: Response) {
-    const data: _InvoiceCreationAttributes = {
+  async update(req: Request, res: Response) {
+    const data: _InvoiceInputCreate = {
       ...req.body,
       UserId: req.body.UserId
     }

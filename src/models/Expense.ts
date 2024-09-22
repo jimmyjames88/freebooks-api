@@ -1,11 +1,17 @@
 import { Model, DataTypes, Optional } from 'sequelize'
-import { _Expense, _PaymentType, _Tax, _TaxType } from '@jimmyjames88/freebooks-types'
-import { sequelize } from '@models/index'
+import {
+  _Expense, _ExpenseInputCreate, _ExpenseInputUpdate, _Tax, _TaxType
+} from '@jimmyjames88/freebooks-types'
+import { sequelize, PaymentType } from '@models/index'
 
-export class Expense extends Model<_Expense, _ExpenseInput> implements _Expense {
+export class Expense extends Model<
+  Optional<_Expense, 'PaymentType' | 'Taxes'>,
+  _ExpenseInputCreate | _ExpenseInputUpdate
+> implements _Expense {
   public id!: number
   public UserId!: number
-  public InvoiceId?: number
+  public InvoiceId!: number
+  public PaymentType!: PaymentType
   public paymentTypeId!: number
   public date!: Date
   public description!: string
@@ -25,9 +31,6 @@ export class Expense extends Model<_Expense, _ExpenseInput> implements _Expense 
     // }, 0)
   }
 }
-
-export interface _ExpenseInput extends Optional<_Expense, 'InvoiceId'> {}
-export interface _ExpenseOutput extends Required<_Expense> {}
 
 Expense.init({
   id: {

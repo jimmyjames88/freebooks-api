@@ -1,11 +1,14 @@
 // Create a Sequelize model for the Client table based on the mongoose model in ./Client.old.ts
 
 import { Model, DataTypes, Optional } from 'sequelize'
-import { _Tax, _TaxType } from '@jimmyjames88/freebooks-types'
+import { _Tax, _TaxType, _TaxInputCreate, _TaxInputUpdate } from '@jimmyjames88/freebooks-types'
 import { sequelize } from '@models/index'
 
 
-export class Tax extends Model<_Tax, _TaxInput> implements _Tax {
+export class Tax extends Model<
+  _Tax,
+  _TaxInputCreate | _TaxInputUpdate
+> implements _Tax {
   public id!: number
   public UserId!: number
   public name!: string
@@ -15,9 +18,6 @@ export class Tax extends Model<_Tax, _TaxInput> implements _Tax {
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 }
-
-export interface _TaxInput extends Optional<_Tax, 'UserId'> {}
-export interface _TaxOutput extends Required<_Tax> {}
 
 Tax.init({
   id: {
