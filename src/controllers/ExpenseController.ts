@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { FindOptions } from 'sequelize'
-import { Expense, Invoice } from '@models/index'
-import { _InvoiceStatus, _Payment } from '@jimmyjames88/freebooks-types'
+import { Client, Expense, Invoice, PaymentType, Tax } from '@models/index'
+import { _ExpenseInputCreate, _InvoiceStatus, _Payment, _Tax } from '@jimmyjames88/freebooks-types'
 
 export default {
   async index(req: Request, res: Response) {
@@ -45,9 +45,35 @@ export default {
     }
   },
 
+  async show(req: Request, res: Response) {
+    try {
+      const expense = await Expense.findOne({
+        where: {
+          id: Number(req.params.id),
+          UserId: Number(req.body.UserId)
+        },
+        include: [
+          { model: Invoice, include: [{ model: Client }] },
+          { model: PaymentType },
+          { model: Tax }
+        ]
+      })
+      res.json(expense)
+    } catch (err: any) {
+      console.warn(err)
+      res.status(500).send({
+        error: err.message
+      })
+    }
+  },
+
   async store(req: Request, res: Response) {
     try {
       const expense = await Expense.create(req.body)
+      expense.setTaxes(req.body.Taxes?.map((tax: _Tax) => tax.id))
+      expense.setInvoice(req.body.Invoice?.id)
+      await expense.save()
+      await expense.Invoice?.save()
       res.status(201).json(expense)
     } catch (err: any) {
       console.warn(err)
@@ -55,79 +81,41 @@ export default {
         error: err.message
       })
     }
+  },
+
+  async update(req: Request, res: Response) {
+    try {
+      const expense = await Expense.findByPk(req.params.id, { include: [{ model: Invoice }] })
+      if (!expense) {
+        return res.sendStatus(404)
+      }
+      expense.setTaxes(req.body.Taxes?.map((tax: _Tax) => tax.id))
+      expense.setInvoice(req.body.Invoice?.id)
+      await expense.save()
+      await expense.Invoice?.save()
+      await expense.update(req.body)
+      res.json(expense)
+    } catch (err: any) {
+      console.warn(err)
+      res.status(500).send({
+        error: err.message
+      })
+    }
+  },
+
+  async destroy(req: Request, res: Response) {
+    try {
+      const expense = await Expense.findByPk(req.params.id)
+      if (!expense) {
+        return res.sendStatus(404)
+      }
+      await expense.destroy()
+      res.sendStatus(204)
+    } catch (err: any) {
+      console.warn(err)
+      res.status(500).send({
+        error: err.message
+      })
+    }
   }
-
-  // async store(req: Request, res: Response) {
-  //   try {
-  //     const invoice = await Invoice.findOne({
-  //       where: {
-  //         id: Number(req.body.InvoiceId),
-  //         UserId: Number(req.body.UserId)
-  //       },
-  //       include: [{ model: Payment }]
-  //     })
-
-  //     if (invoice) {
-  //       const payment = await invoice.createPayment(req.body)
-  //       invoice.Payments.push(payment)
-  //       const paymentTotal = invoice.Payments.reduce((acc, payment: _Payment) => {
-  //         return acc + payment.amount
-  //       }, 0)
-  //       console.log('>>>>', paymentTotal, invoice.total)
-  //       if (paymentTotal >= invoice.total) {
-  //         console.log('###########')
-  //         invoice.status = _InvoiceStatus.PAID
-  //         await invoice.save()
-  //       }
-  //       return res.status(201).json(payment)
-  //     }
-  //   } catch (err: any) {
-  //     res.status(500).send({
-  //       error: err.message
-  //     })
-  //   }
-  // },
-
-  // async update(req: Request, res: Response) {
-  //   try {
-  //     const payment = await Payment.findOne({
-  //       where: {
-  //         id: Number(req.body.id),
-  //         UserId: Number(req.body.UserId)
-  //       }
-  //     })
-  //     if (payment) {
-  //       payment.set({
-  //         ...req.body,
-  //         UserId: Number(req.body.UserId)
-  //       })
-  //       await payment.save()
-  //       res.send(payment)
-  //     }
-  //   } catch (err: any) {
-  //     res.status(500).send({
-  //       error: err.message
-  //     })
-  //   }
-  // },
-
-  // async destroy(req: Request, res: Response) {
-  //   try {
-  //     const payment = await Payment.findOne({
-  //       where: {
-  //         id: Number(req.body.id),
-  //         UserId: Number(req.body.UserId)
-  //       }
-  //     })
-  //     if (payment) {
-  //       await payment.destroy()
-  //       res.send(payment)
-  //     }
-  //   } catch (err: any) {
-  //     res.status(500).send({
-  //       error: err.message
-  //     })
-  //   }
-  // },
-  
 }

@@ -19,7 +19,7 @@ const saveExpenses = async (invoice: Invoice, expenses: _Expense[]) => {
   if (existingExpenses) {
     for (let existingExpense of existingExpenses) {
       if (!expenses.find((expense: _Expense) => expense.id === existingExpense.id)) {
-        await existingExpense.update({ InvoiceId: null })
+        await existingExpense.update({ InvoiceId: undefined })
       }
     }
   }
@@ -212,20 +212,60 @@ export default {
     }
   },
 
-  async destroy(req: Request, res: Response) {
-    Invoice.destroy({
+  async updateStatus(req: Request, res: Response) {
+    const invoice = await Invoice.findOne({
       where: {
         id: Number(req.params.InvoiceId),
         UserId: Number(req.body.UserId)
       }
-    }).then((deleted) => {
-      if (deleted)
-        return res.sendStatus(204)
-      return res.sendStatus(404)
-    }).catch((err: Error) => {
-      console.warn(err)
-      return res.sendStatus(500)
     })
+    if (invoice) {
+      try {
+        invoice.status = req.body.status
+        await invoice.save()
+        return res.sendStatus(204)
+      } catch (err: any) {
+        console.warn(err)
+        return res.sendStatus(500)
+      }
+    }
+    return res.sendStatus(404)
+  },
+
+  async destroy(req: Request, res: Response) {
+    const invoice = await Invoice.findOne({
+      where: {
+        id: Number(req.params.InvoiceId),
+        UserId: Number(req.body.UserId)
+      },
+      include: [ Expense, Payment ]
+    })
+
+    // delete associated payments and set InvoiceId of expeses to null
+    if (invoice) {
+      for (const payment of invoice.Payments) {
+        await payment.destroy()
+      }
+      for (const expense of invoice.Expenses) {
+        expense.InvoiceId = null
+        await expense.save()
+      }
+      await invoice.destroy()
+      return res.sendStatus(204)
+    }
+    // Invoice.destroy({
+    //   where: {
+    //     id: Number(req.params.InvoiceId),
+    //     UserId: Number(req.body.UserId)
+    //   }
+    // }).then((deleted) => {
+    //   if (deleted)
+    //     return res.sendStatus(204)
+    //   return res.sendStatus(404)
+    // }).catch((err: Error) => {
+    //   console.warn(err)
+    //   return res.sendStatus(500)
+    // })
   },
 
   async loadLatestRefNo(req: Request, res: Response) {

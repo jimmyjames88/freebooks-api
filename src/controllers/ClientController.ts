@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Op, FindOptions } from 'sequelize'
-import { _Collection } from '@jimmyjames88/freebooks-types'
-import { Client, Invoice, _ClientCreationAttributes } from '@models/index'
+import { _ClientInputCreate, _Collection } from '@jimmyjames88/freebooks-types'
+import { Client, Expense, Invoice, Payment } from '@models/index'
 
 export default {
   async index(req: Request, res: Response) {
@@ -67,7 +67,7 @@ export default {
   },
 
   async store(req: Request, res: Response) {
-    const data: _ClientCreationAttributes = req.body
+    const data: _ClientInputCreate = req.body
     const client = new Client({
       ...data,
       UserId: Number(req.body.UserId)
@@ -107,21 +107,28 @@ export default {
         UserId: Number(req.body.UserId),
         id: req.params.ClientId
       },
-      include: Invoice
+      include: {
+        model: Invoice,
+        include: [ Expense, Payment]
+      }
     })
 
     try {
       if (client) {
-        if (client.Invoices) {
-          client.Invoices.forEach(async (invoice) => {
-            await invoice.destroy()
-          })
-          await client.destroy()
+        // delete client invoices
+        for (const invoice of client.Invoices) {
+          for (const expense of invoice.Expenses) {
+            expense.InvoiceId = null
+            await expense.save()
+          }
+          await invoice.destroy()
         }
-        return res.sendStatus(204)
+        await client.destroy()  
+        return res.sendStatus(204) 
       }
     } catch(err: any) {
-      return res.sendStatus(404).send(err.message)
+      console.log(err)
+      return res.sendStatus(404)
     }
   }
 }

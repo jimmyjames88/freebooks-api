@@ -6,8 +6,6 @@ import {
   _Invoice, _LineItem, _InvoiceStatus, _Tax, _TaxType, _InvoiceInputCreate, _InvoiceInputUpdate
 } from '@jimmyjames88/freebooks-types'
 
-const GUARDED = ['UserId', 'ClientId']
-
 export class Invoice extends Model<
   Optional<_Invoice, 'User' | 'Client' | 'Expenses' | 'Payments' | 'Taxes'>,
   _InvoiceInputCreate | _InvoiceInputUpdate > implements _Invoice {
@@ -85,9 +83,6 @@ export class Invoice extends Model<
   toJSON() {
     // todo - centralize
     let attributes = Object.assign({}, this.get())
-    for (let a of GUARDED) {
-      delete attributes[a as keyof _Invoice]
-    }
     return attributes
   }
 }
@@ -123,8 +118,7 @@ Invoice.init({
   }
 }, {
   hooks: {
-    async beforeSave(invoice, options) {
-      console.log('BEFORESAVE!!!', await invoice.calculateTotal())
+    async beforeSave(invoice: Invoice) {
       invoice.total = await invoice.calculateTotal()
     }
   },

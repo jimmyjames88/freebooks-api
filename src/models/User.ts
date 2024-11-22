@@ -60,7 +60,9 @@ User.hasMany(Payment)
 User.hasOne(Profile)
 User.hasMany(Tax)
 Invoice.belongsTo(Client)
-Invoice.hasMany(Expense)
+Invoice.hasMany(Expense, {
+  onDelete: 'DELETE'
+})
 Invoice.hasMany(Payment)
 Invoice.belongsToMany(Tax, { through: 'invoices_taxes' })
 Invoice.belongsTo(User)

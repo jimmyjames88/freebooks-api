@@ -1,34 +1,39 @@
 import { Model, DataTypes, Optional } from 'sequelize'
 import {
-  _Expense, _ExpenseInputCreate, _ExpenseInputUpdate, _Tax, _TaxType
+  _Expense, _ExpenseInputCreate, _ExpenseInputUpdate, _TaxType
 } from '@jimmyjames88/freebooks-types'
-import { sequelize, PaymentType } from '@models/index'
+import { sequelize, Invoice, PaymentType, Tax } from '@models/index'
 
 export class Expense extends Model<
-  Optional<_Expense, 'PaymentType' | 'Taxes'>,
+  Optional<_Expense, 'PaymentType' | 'Taxes' | 'Invoice'>,
   _ExpenseInputCreate | _ExpenseInputUpdate
 > implements _Expense {
   public id!: number
   public UserId!: number
-  public InvoiceId!: number
+  public InvoiceId!: number | null
+  public Invoice!: Invoice
   public PaymentType!: PaymentType
   public PaymentTypeId!: number
   public date!: Date
   public description!: string
   public subtotal!: number
-  public Taxes!: _Tax[]
+  public Taxes!: Tax[]
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
   public getTaxes!: Function
+  public setTaxes!: Function
+  public setInvoice!: Function
+  public getInvoice!: Function
 
-  public total(): number {
+  public async total(): Promise<number> {
+    const taxes = await this.getTaxes()
+    for (let tax of taxes) {
+      if (tax.type === _TaxType.PERCENTAGE) {
+        return this.subtotal + (this.subtotal * tax.rate)
+      }
+      return this.subtotal + tax.rate
+    }
     return this.subtotal
-    // const taxes = await this.getTaxes()
-    // return this.subtotal + taxes.reduce((acc: number, tax: _Tax) => {
-    //   if (tax.type === _TaxType.FLAT) return acc + tax.rate
-    //   if (tax.type === _TaxType.PERCENTAGE) return acc + (this.subtotal * (tax.rate * 100))
-    //   return acc
-    // }, 0)
   }
 }
 

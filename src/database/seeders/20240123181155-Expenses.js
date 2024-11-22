@@ -11,6 +11,7 @@ module.exports = {
         InvoiceId: Math.floor(Math.random() * 300) + 1,
         date: faker.date.past(),
         description: faker.lorem.sentence(),
+        paymentTypeId: Math.floor(Math.random() * 3) + 1,
         subtotal: faker.finance.amount()
       }
     })

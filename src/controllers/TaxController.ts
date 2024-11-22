@@ -7,9 +7,12 @@ export default {
       where: { UserId: Number(req.body.UserId) }
     })
     if (taxes) {
-      return res.json(taxes)
+      return res.json({
+        items: taxes,
+        total: taxes.length
+      })
     }
-    return res.status(401).json({})
+    
   },
 
   async show(req: Request, res: Response) {
