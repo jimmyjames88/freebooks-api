@@ -19,7 +19,12 @@ const saveExpenses = async (invoice: Invoice, expenses: _Expense[]) => {
   if (existingExpenses) {
     for (let existingExpense of existingExpenses) {
       if (!expenses.find((expense: _Expense) => expense.id === existingExpense.id)) {
-        await existingExpense.update({ InvoiceId: undefined })
+        try {
+          existingExpense.InvoiceId = null
+          await existingExpense.save()
+        } catch (err: any) {
+          console.warn(err)
+        }
       }
     }
   }
