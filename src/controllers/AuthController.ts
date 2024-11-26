@@ -16,10 +16,35 @@ export default {
         process.env.NODE_APP_SECRET as jwt.Secret,
         { expiresIn: "15 minutes" }
       )
+      const refreshToken = jwt.sign(
+        { UserId: user.id },
+        process.env.NODE_APP_SECRET as jwt.Secret,
+        { expiresIn: "1 hour" }
+      )
       return res.status(200).json({
         user,
-        token: `Bearer ${token}`
+        token: `Bearer ${token}`,
+        refreshToken
       })
+    }
+    return res.status(401).json({})
+  },
+
+  async refresh (req: Request, res: Response) {
+    const { refreshToken } = req.body
+    try {
+      const { UserId } = jwt.verify(refreshToken, process.env.NODE_APP_SECRET as jwt.Secret) as { UserId: number }
+      const user = await User.findOne({ where: { id: UserId }, include: Profile })
+      if (user) {
+        const token = jwt.sign(
+          { UserId: user.id },
+          process.env.NODE_APP_SECRET as jwt.Secret,
+          { expiresIn: "15 minutes" }
+        )
+        return res.status(200).json({ token: `Bearer ${token}` })
+      }
+    } catch (err) {
+      return res.status(403).json({})
     }
     return res.status(401).json({})
   },
@@ -27,7 +52,6 @@ export default {
   async register(req: Request, res: Response) {
     const { name, email, password }: _User = req.body
 
-    
     const user = await User.create({
       name,
       email,

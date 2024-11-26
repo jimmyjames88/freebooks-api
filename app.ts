@@ -36,8 +36,10 @@ app.use((req, res, next) => {
     const authHeader = req.headers['authorization'] as string
     if (authHeader) {
       const token = authHeader.split(" ")[1]
-      const { UserId } = jwt.decode(token) as any
-      req.body.UserId = UserId
+      try {
+        const { UserId } = jwt.decode(token) as any
+        req.body.UserId = UserId
+      } catch (err) {}
     }
   }
   
