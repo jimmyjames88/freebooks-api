@@ -85,7 +85,12 @@ export default {
 
   async update(req: Request, res: Response) {
     try {
-      const expense = await Expense.findByPk(req.params.id, { include: [{ model: Invoice, include: [Client] }, { model: PaymentType }] })
+      const expense = await Expense.findByPk(req.params.id, {
+        include: [
+          { model: Invoice, include: [Client] },
+          { model: Tax },
+          { model: PaymentType }]
+      })
       if (!expense) {
         return res.sendStatus(404)
       }
