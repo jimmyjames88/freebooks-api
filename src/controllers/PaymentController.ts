@@ -42,11 +42,8 @@ export default {
         const paymentTotal = invoice.Payments.reduce((acc, payment: Payment) => {
           return acc + payment.amount
         }, 0)
-        // if (paymentTotal >= invoice.total) {
-        //   console.log('###########')
-        //   invoice.status = _InvoiceStatus.PAID
-        //   await invoice.save()
-        // }
+        invoice.total = await invoice.calculateTotal()
+        await invoice.save()
         return res.status(201).json(payment)
       }
     } catch (err: any) {
@@ -80,15 +77,27 @@ export default {
   },
 
   async destroy(req: Request, res: Response) {
+    console.log(req.params, req.query, req.body)
     try {
       const payment = await Payment.findOne({
         where: {
-          id: Number(req.body.id),
+          id: Number(req.params.PaymentId),
           UserId: Number(req.body.UserId)
         }
       })
       if (payment) {
+        const invoice = await Invoice.findOne({
+          where: {
+            id: payment.InvoiceId,
+            UserId: Number(req.body.UserId)
+          }
+        })
+
         await payment.destroy()
+        if (invoice) {
+          invoice.total = await invoice.calculateTotal()
+          await invoice.save()
+        }
         res.send(payment)
       }
     } catch (err: any) {
